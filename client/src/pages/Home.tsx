@@ -86,8 +86,8 @@ const dimensionConfig: Record<string, { icon: string; color: string }> = {
   "4.- Trayectorias laborales": { icon: "📈", color: "#7C3AED" },
   "5.- Trayectorias educativas": { icon: "📚", color: "#0891B2" },
   "6.- Modelo educativo con perspectiva de género": { icon: "🎓", color: "#F59E0B" },
-  "7.- Divulgación Científica": { icon: "📢", color: "#EC4899" },
-  "8.- Mujeres en Conocimiento": { icon: "👩‍🔬", color: "#8B5CF6" },
+  "7.- Participación equilibrada en la divulgación científica": { icon: "📢", color: "#EC4899" },
+  "8.- Visibilización del aporte de las mujeres en las áreas de conocimiento": { icon: "👩‍🔬", color: "#8B5CF6" },
 };
 
 export default function Home() {
