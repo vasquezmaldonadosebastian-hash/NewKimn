@@ -108,7 +108,7 @@ export default function Home() {
         config: dimensionConfig[dimension] || { icon: "📊", color: "#6B7280" },
       }))
       .sort((a, b) => a.dimension.localeCompare(b.dimension))
-      .slice(0, 6); // Mostrar solo las primeras 6
+      .slice(0, 8); // Mostrar solo las primeras 8
   }, [indicators]);
 
   const totalIndicadores = indicators.length;
