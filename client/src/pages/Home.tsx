@@ -207,9 +207,9 @@ export default function Home() {
       <section className="container -mt-2 pb-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <KpiCard label="Indicadores Totales" value={totalIndicadores.toString()} trend="up" />
-          <KpiCard label="Oficializados" value={oficializados.toString()} trend="up" />
+          <KpiCard label="Areas" value={"4 Areas estrategicas"} trend="up" />
           <KpiCard label="Dimensiones" value={dimensionStats.length.toString()} trend="up" />
-          <KpiCard label="Cobertura" value={(Math.round((oficializados / totalIndicadores) * 100)).toString() + "%"} trend="up" />
+          <KpiCard label="Cobertura" value={"10 Unidades"} trend="up" />
         </div>
       </section>
 
