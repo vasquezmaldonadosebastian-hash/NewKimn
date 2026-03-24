@@ -65,7 +65,7 @@ export default function HeaderUCT() {
                 {/* ⬇⬇⬇ AQUÍ CAMBIAS EL LOGO ⬇⬇⬇ 
                   Solo cambia la ruta en el atributo 'src' 
                 */}
-                <img 
+                <gif 
                   src="/logo-uct.gif" 
                   alt="Logo KIMN" 
                   className="h-12 md:h-16 w-auto object-contain" 
