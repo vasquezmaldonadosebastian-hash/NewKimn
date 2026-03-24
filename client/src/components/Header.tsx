@@ -61,7 +61,7 @@ export default function Header() {
               <div className="cursor-pointer hover:opacity-90 transition-opacity">
                 {/* ⬇⬇⬇ AQUÍ CAMBIAS EL LOGO ⬇⬇⬇ 
                 */}
-                <img 
+                <gif 
                   src="/logo-uct.gif" 
                   alt="Logo KIMN" 
                   className="h-12 md:h-16 w-auto object-contain" 
