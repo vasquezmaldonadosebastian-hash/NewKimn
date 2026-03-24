@@ -62,7 +62,7 @@ export default function Header() {
                 {/* ⬇⬇⬇ AQUÍ CAMBIAS EL LOGO ⬇⬇⬇ 
                 */}
                 <img 
-                  src="/logo-uct.png" 
+                  src="/logo-uct.gif" 
                   alt="Logo KIMN" 
                   className="h-12 md:h-16 w-auto object-contain" 
                 />
