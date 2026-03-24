@@ -1,6 +1,6 @@
 /*
  * Header — KIMN Género
- * Incluye barra superior centrada y logo en formato gif
+ * Incluye barra superior centrada y logo en formato gif desde __manus__
  */
 
 import { useState } from "react";
@@ -57,13 +57,13 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-6">
             
-            {/* LOGO - Corregido a .gif */}
+            {/* LOGO - Ruta exacta basada en la estructura de carpetas */}
             <Link href="/">
               <div className="cursor-pointer hover:opacity-90 transition-opacity">
                 <img 
-                  src="/logo-uct.gif" 
+                  src="/__manus__/logo-uct.gif" 
                   alt="Logo KIMN" 
-                  className="h-10 md:h-14 w-auto object-contain" 
+                  className="h-10 md:h-14 w-auto object-contain bg-[#03122E] p-1.5 rounded-md" 
                 />
               </div>
             </Link>
