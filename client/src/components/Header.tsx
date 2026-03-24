@@ -1,8 +1,3 @@
-/*
- * Header — KIMN Género
- * Incluye barra superior centrada y logo en formato gif (letras negras) sobre fondo blanco
- */
-
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X, Search } from "lucide-react";
@@ -57,13 +52,12 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-6">
             
-            {/* LOGO - Fondo azul eliminado */}
+            {/* LOGO */}
             <Link href="/">
               <div className="cursor-pointer hover:opacity-90 transition-opacity">
                 <img 
                   src="/__manus__/logo-uct.gif" 
                   alt="Logo KIMN" 
-                  {/* Clases bg-, p-, rounded- eliminadas */}
                   className="h-10 md:h-14 w-auto object-contain" 
                 />
               </div>
