@@ -1,6 +1,6 @@
 /*
  * HeaderUCT — Header institucional basado en diseño unificado
- * Incluye: Barra azul superior centrada, logo UCT gif desde __manus__, navegación principal
+ * Incluye: Barra azul superior centrada, logo UCT gif (letras negras) sobre fondo blanco, navegación principal
  */
 
 import { Menu, X, Search } from "lucide-react";
@@ -54,18 +54,19 @@ export default function HeaderUCT() {
         </div>
       </div>
 
-      {/* ═══ MAIN HEADER (Gris) ═══ */}
+      {/* ═══ MAIN HEADER (Gris/Blanco) ═══ */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-6">
             
-            {/* LOGO - Ruta exacta basada en la estructura de carpetas */}
+            {/* LOGO - Fondo azul eliminado */}
             <Link href="/">
               <div className="cursor-pointer hover:opacity-90 transition-opacity">
                 <img 
                   src="/__manus__/logo-uct.gif" 
                   alt="Logo KIMN" 
-                  className="h-10 md:h-14 w-auto object-contain bg-[#03122E] p-1.5 rounded-md" 
+                  {/* Clases bg-, p-, rounded- eliminadas */}
+                  className="h-10 md:h-14 w-auto object-contain" 
                 />
               </div>
             </Link>
