@@ -9,87 +9,87 @@ import { Search, BookMarked } from "lucide-react";
 const terminos = [
   {
     termino: "Brecha de género",
-    definicion: "Diferencia cuantitativa entre hombres y mujeres en cualquier dimensión medible (salarios, participación laboral, educación, etc.). Se expresa generalmente como porcentaje o ratio.",
-    categoria: "General",
+    definicion: "Corresponde a la diferencia observable entre la situación de mujeres y hombres en distintos ámbitos sociales, económicos o institucionales. En términos analíticos, la brecha permite identificar la magnitud de dichas diferencias y evaluar si estas implican ventajas o desventajas relativas entre ambos grupos. Una brecha positiva indica una posición más favorable para las mujeres respecto de los hombres, mientras que una brecha negativa refleja una situación de desventaja para ellas (INE, 2015; SIES, 2024). En el presente diagnóstico, este concepto se utiliza para identificar desigualdades en la participación, condiciones y experiencias de mujeres y hombres en la vida universitaria.",
+    categoria: "Conceptos Generales",
   },
   {
-    termino: "Brecha salarial de género",
-    definicion: "Diferencia porcentual entre el salario mediano o promedio de hombres y mujeres. Se calcula como: (salario masculino - salario femenino) / salario masculino × 100.",
-    categoria: "Mercado Laboral",
+    termino: "Conciliación",
+    definicion: "Se refiere a la articulación entre las responsabilidades laborales, familiares y personales, buscando compatibilizar el desempeño de las personas en estos distintos ámbitos de la vida. El concepto alude a la forma en que se organizan el tiempo y las actividades asociadas al trabajo remunerado, la vida familiar y el desarrollo personal, así como a las estrategias que permiten equilibrar dichas esferas (Cobo y Ranea, 2020).",
+    categoria: "Trabajo y Cuidados",
   },
   {
-    termino: "Desagregación por sexo",
-    definicion: "Proceso de recopilación y presentación de datos estadísticos diferenciados por sexo (hombre/mujer), que permite identificar desigualdades de género en cualquier ámbito.",
-    categoria: "Estadística",
+    termino: "Corresponsabilidad",
+    definicion: "Alude a la distribución equitativa de las responsabilidades domésticas y de cuidado entre hombres y mujeres, así como a la participación conjunta de distintos actores sociales —familias, Estado, mercado y comunidad— en la organización y provisión de los cuidados. Este enfoque busca superar la idea de que la conciliación constituye un problema individual de las mujeres, promoviendo en cambio una redistribución social de las tareas de cuidado (OIT-PNUD, 2009; ONU Mujeres, 2021).",
+    categoria: "Trabajo y Cuidados",
   },
   {
-    termino: "Empoderamiento económico",
-    definicion: "Proceso mediante el cual las mujeres adquieren mayor control sobre los recursos económicos, incluyendo ingresos, activos y oportunidades laborales.",
-    categoria: "General",
+    termino: "Cuidado",
+    definicion: "Es un derecho humano autónomo, comprensivo del derecho a cuidar, a ser cuidado y al autocuidado (Corte IDH, 2025). Se trata de una actividad indispensable para la reproducción social y para sostener nuestras vidas, nuestro entorno y nuestro mundo que incluye cuidados físicos, emocionales y sociales. La carga de cuidados se ha concentrado históricamente en las mujeres de manera desproporcionada. En todos los contextos, la participación de las mujeres en tareas domésticas no remuneradas y su costo horario en este trabajo es mucho mayor al de los hombres (Gamba y Diz, 2021).",
+    categoria: "Trabajo y Cuidados",
   },
   {
-    termino: "Enfoque de género",
-    definicion: "Marco analítico que examina las relaciones sociales entre hombres y mujeres, y las diferencias en sus roles, responsabilidades, oportunidades y necesidades, con el objetivo de identificar y corregir desigualdades.",
-    categoria: "General",
-  },
-  {
-    termino: "Femicidio",
-    definicion: "Homicidio de una mujer por razones de género. En Chile, el femicidio íntimo está tipificado en el artículo 390 bis del Código Penal y el femicidio no íntimo en el artículo 390 ter.",
-    categoria: "Violencia",
-  },
-  {
-    termino: "Fuerza de trabajo",
-    definicion: "Conjunto de personas en edad de trabajar (15 años y más) que se encuentran ocupadas o desocupadas. También denominada población económicamente activa (PEA).",
-    categoria: "Mercado Laboral",
+    termino: "Equidad de género",
+    definicion: "Se define como la imparcialidad en el trato hacia mujeres y hombres según sus necesidades específicas. Esta imparcialidad puede implicar un trato igualitario o diferenciado con el fin de compensar desventajas históricas y sociales que afectan a las mujeres (Unesco, 2014).",
+    categoria: "Conceptos Generales",
   },
   {
     termino: "Género",
-    definicion: "Construcción social y cultural que asigna roles, comportamientos, actividades y atributos considerados apropiados para hombres y mujeres en una sociedad determinada. Se distingue del sexo biológico.",
-    categoria: "General",
+    definicion: "Se entiende por género (del inglés gender) la construcción social y cultural de la feminidad y la masculinidad, tanto en lo referente a las características psicológicas que se atribuyen a cada sexo como a las pautas de su comportamiento normalizado. La diferencia sexual se naturaliza, transformándose en desigualdad cultural en detrimento histórico de las mujeres. Así, el sexo remite a los caracteres biológicos, y el género implicaría emociones, conductas, valores morales (Cobo y Ranea, 2020, p.119).",
+    categoria: "Conceptos Generales",
   },
   {
     termino: "Igualdad de género",
-    definicion: "Situación en que hombres y mujeres tienen los mismos derechos, responsabilidades y oportunidades en todos los ámbitos de la vida. Implica que los intereses, necesidades y prioridades de todos los géneros son igualmente considerados.",
-    categoria: "General",
+    definicion: "Se refiere a igualdad de derechos, responsabilidades y oportunidades para hombres y mujeres, para niñas y niños. Este concepto implica que tanto los derechos como las responsabilidades y las oportunidades no están sujetas al sexo de las personas; se centra en la igualdad de derechos y oportunidades y no en que hombres y mujeres sean iguales (Unesco, 2014).",
+    categoria: "Conceptos Generales",
   },
   {
-    termino: "Indicador de género",
-    definicion: "Medida que señala el estado o nivel de las diferencias entre hombres y mujeres en un momento del tiempo, expresando en particular las desigualdades que resultan de la diferencia sexual o de género (INE, 2019).",
-    categoria: "Estadística",
+    termino: "Segregación horizontal",
+    definicion: "(Segregación ocupacional por género o 'paredes de cristal'): Se refiere a la concentración desproporcionada de un grupo social en ciertos sectores laborales, campos de estudio, profesiones o industrias, en lugar de una distribución uniforme, es decir da cuenta de una persistencia de áreas masculinizadas y feminizadas (OIT-PNUD, 2019, p. 6).",
+    categoria: "Ámbito Laboral",
   },
   {
-    termino: "Paridad de género",
-    definicion: "Representación equitativa de hombres y mujeres en un ámbito determinado, generalmente expresada como una proporción de 50/50 o un rango aceptable cercano a este.",
-    categoria: "General",
-  },
-  {
-    termino: "Segregación ocupacional",
-    definicion: "Concentración de hombres y mujeres en diferentes tipos de empleos u ocupaciones. La segregación horizontal se refiere a la distribución en distintas ramas; la vertical, a la distribución en distintos niveles jerárquicos.",
-    categoria: "Mercado Laboral",
-  },
-  {
-    termino: "Tasa de participación laboral",
-    definicion: "Proporción de la población en edad de trabajar que forma parte de la fuerza de trabajo (ocupados + desocupados). Se calcula como: (fuerza de trabajo / población en edad de trabajar) × 100.",
-    categoria: "Mercado Laboral",
-  },
-  {
-    termino: "Techo de cristal",
-    definicion: "Barrera invisible que impide a las mujeres ascender a posiciones de alta dirección o liderazgo en organizaciones, a pesar de tener las calificaciones necesarias.",
-    categoria: "Mercado Laboral",
-  },
-  {
-    termino: "Trabajo no remunerado",
-    definicion: "Trabajo realizado sin remuneración económica, que incluye el trabajo doméstico, el cuidado de personas dependientes, el trabajo voluntario y el trabajo para la comunidad. Recae desproporcionadamente en las mujeres.",
-    categoria: "Uso del Tiempo",
+    termino: "Segregación vertical",
+    definicion: "(Jerarquía ocupacional o 'techo de cristal'): Alude a las diferenciaciones que existen en cuanto al acceso a puestos de trabajo con distinta jerarquía entre mujeres y hombres. Se manifiesta en una alta concentración de mujeres en los escalones más bajos en sus ocupaciones y con una mayor concentración en ocupaciones no conectadas por vínculos de ascendencia y movilidad (Selamé, 2004; Bueno y Perticará 2009; ELE-INE).",
+    categoria: "Ámbito Laboral",
   },
   {
     termino: "Violencia de género",
-    definicion: "Cualquier acto de violencia basado en el género que resulte o pueda resultar en daño físico, sexual o psicológico para la mujer, incluidas las amenazas, la coacción o la privación arbitraria de libertad (ONU, 1993).",
-    categoria: "Violencia",
+    definicion: "Cualquier acción o conducta basada en el género que cause muerte, daño o sufrimiento físico, sexual o psicológico a una persona, tanto en el ámbito público como en el privado. En el contexto de la educación superior, puede manifestarse a través de distintas prácticas que afectan la dignidad, la integridad o el bienestar de quienes integran la comunidad universitaria (Convención de Belém do Pará, 1994).",
+    categoria: "Violencia de Género",
   },
+  {
+    termino: "Violencia psicológica",
+    definicion: "Conducta que tiene por objeto causar temor o intimidación buscando controlar las conductas, sentimientos y pensamientos de la persona que está siendo agredida; atentando contra el bienestar psíquico de la/el afectada/o. Ejemplo: burlas, sobrenombres ofensivos, manipulaciones, garabatos, insultos, restricción a la libertad personal, aislamiento, amenazas (SERNAM, 2015).",
+    categoria: "Violencia de Género",
+  },
+  {
+    termino: "Violencia sexual",
+    definicion: "Todo acto sexual, la tentativa de consumar un acto sexual, los comentarios o insinuaciones sexuales no deseados, o las acciones para comercializar o utilizar de cualquier otro modo la sexualidad de una persona mediante coacción por otra persona, independientemente de la relación de ésta con la víctima (OMS, 2013, p. 2).",
+    categoria: "Violencia de Género",
+  },
+  {
+    termino: "Violencia física",
+    definicion: "Acción dirigida a atentar contra la integridad física de la víctima, como un mecanismo para ejercer poder y control. Ejemplos: empujones, tirones de pelo, pellizcos, cachetadas, quemaduras, rasguños, patadas, golpes de puños, golpes con objetos, ataques con armas (SERNAM, 2015).",
+    categoria: "Violencia de Género",
+  },
+  {
+    termino: "Violencia económica/patrimonial",
+    definicion: "Privar de las necesidades básicas al otro u otra. Control de la víctima a través de la manipulación del dinero, privación económica, endeudamiento o que tomen control de su dinero o bienes (SERNAM, 2015).",
+    categoria: "Violencia de Género",
+  },
+  {
+    termino: "Violencia de género digital",
+    definicion: "Se perpetra a través de medios digitales (redes sociales, correo, apps) y no está desconectada de la violencia machista del mundo offline (OVIGEM, 2021). Incluye manifestaciones como: la sextorsión (amenazas con difundir material íntimo), el doxing (publicación de información privada sin consentimiento), ataques de troles (cuentas coordinadas para incitar violencia), acoso sexual en línea y porno venganza.",
+    categoria: "Violencia de Género",
+  },
+  {
+    termino: "Violencia simbólica",
+    definicion: "Definida por Bourdieu (2000) como aquella violencia amortiguada, insensible e invisible para sus propias víctimas, que se ejerce esencialmente a través de los caminos puramente simbólicos de la comunicación. Es una forma de poder que se ejerce directamente sobre los cuerpos al margen de cualquier coacción física, instalando normas incuestionables que orientan emociones, pensamientos y conductas.",
+    categoria: "Violencia de Género",
+  }
 ];
 
-const categorias = ["Todos", "General", "Mercado Laboral", "Estadística", "Violencia", "Uso del Tiempo"];
+const categorias = ["Todos", "Conceptos Generales", "Trabajo y Cuidados", "Ámbito Laboral", "Violencia de Género"];
 
 export default function Glosario() {
   const [busqueda, setBusqueda] = useState("");
@@ -119,10 +119,10 @@ export default function Glosario() {
             className="text-3xl font-bold text-[#1A0A2E] mb-3"
             style={{ fontFamily: 'Montserrat, sans-serif' }}
           >
-            Glosario
+            Glosario de Género
           </h1>
           <p className="text-gray-600 max-w-2xl leading-relaxed">
-            Definiciones de los principales conceptos y términos utilizados en el Observatorio de Indicadores de Género.
+            Definiciones de los principales conceptos sobre equidad, cuidados, brechas y prevención de la violencia de género, fundamentales para el diagnóstico institucional.
           </p>
         </div>
       </div>
