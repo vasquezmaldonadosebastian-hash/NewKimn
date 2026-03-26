@@ -2,12 +2,13 @@
  * IndicadorDetail — Página individual de indicador
  * Design: Estructura del Proto_observatorio_genero.html adaptada a React
  * Incluye: Hero, KPIs, Dashboard con iframe, Ficha técnica, Info cards
- * Mejoras: Fórmulas con variables, instructivos completos, tipos seguros
+ * Mejoras: Fórmulas con variables dinámicas en LaTeX, instructivos completos, tipos seguros
  */
 
 import { useState } from "react";
 import { ChevronDown, RefreshCw, Expand, Share2, Download, Info, ExternalLink } from "lucide-react";
 import Latex from "react-latex-next";
+import "katex/dist/katex.min.css"; // Importante para que el LaTeX se renderice correctamente
 import type { Indicator } from "@shared/types";
 
 interface IndicadorDetailProps {
@@ -20,7 +21,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
     metodologia: false,
     notas: false,
   });
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [, setIsFullscreen] = useState(false);
 
   const toggleAccordion = (id: string) => {
     setOpenAccordions((prev) => ({
@@ -43,13 +44,17 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
 
   const instructivoEsUrl = tieneInstructivo && indicador.instructivoCalculo.startsWith("http");
 
-  // Detectar si la fórmula es larga
-  const formulaLarga = indicador.formula && indicador.formula.length > 150;
+  // Detectar si la fórmula es larga (usamos la normal o la simplificada como fallback)
+  const formulaParaEvaluar = (indicador as any)["Formula simplificada"] || indicador.formula || "";
+  const formulaLarga = formulaParaEvaluar.length > 150;
+
+  // Extraer valores dinámicos asumiendo que el tipo Indicator puede no tenerlos mapeados estrictamente aún
+  const formulaSimplificada = (indicador as any)["Formula simplificada"];
+  const variables = (indicador as any).variables;
 
   // Manejadores para controles de dashboard
   const handleRefresh = () => {
     if (tieneIframe) {
-      // Recargar el iframe
       const iframes = document.querySelectorAll("iframe[title='Dashboard']");
       iframes.forEach((iframe) => {
         if (iframe instanceof HTMLIFrameElement) {
@@ -74,14 +79,12 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
         url: window.location.href,
       });
     } else {
-      // Fallback: copiar URL al portapapeles
       navigator.clipboard.writeText(window.location.href);
       alert("URL copiada al portapapeles");
     }
   };
 
   const handleDownload = () => {
-    // Placeholder para descarga de reporte
     alert("Descarga de reporte en desarrollo");
   };
 
@@ -89,7 +92,6 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
     <div className="min-h-screen bg-[#F8F9FA]">
       {/* ═══ HERO ═══ */}
       <section className="bg-gradient-to-br from-[#03122E] via-[#03122E] to-[#0176DE] relative overflow-hidden py-16">
-        {/* Decorative circles */}
         <div className="absolute w-[500px] h-[500px] rounded-full bg-white/4 -top-48 -right-24 pointer-events-none" />
         <div className="absolute w-[300px] h-[300px] rounded-full bg-white/4 -bottom-24 left-12 pointer-events-none" />
 
@@ -170,7 +172,6 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
 
         {/* ── Dashboard Card ── */}
         <div className="bg-white rounded-xl shadow-md overflow-hidden mb-12">
-          {/* Toolbar */}
           <div className="flex items-center justify-between px-6 py-4 bg-[#E8F2FF] border-b border-[#E5D4F0]">
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 rounded-full bg-[#27AE60]" />
@@ -184,35 +185,19 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
 
             {tieneIframe && (
               <div className="flex items-center gap-2">
-                <button
-                  onClick={handleRefresh}
-                  className="p-2 hover:bg-white/50 rounded-lg transition-colors"
-                  title="Actualizar dashboard"
-                  aria-label="Actualizar visualización"
-                >
+                <button onClick={handleRefresh} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Actualizar dashboard">
                   <RefreshCw className="w-4 h-4 text-gray-600" />
                 </button>
-                <button
-                  onClick={handleFullscreen}
-                  className="p-2 hover:bg-white/50 rounded-lg transition-colors"
-                  title="Pantalla completa"
-                  aria-label="Ver en pantalla completa"
-                >
+                <button onClick={handleFullscreen} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Pantalla completa">
                   <Expand className="w-4 h-4 text-gray-600" />
                 </button>
-                <button
-                  onClick={handleShare}
-                  className="p-2 hover:bg-white/50 rounded-lg transition-colors"
-                  title="Compartir"
-                  aria-label="Compartir indicador"
-                >
+                <button onClick={handleShare} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Compartir">
                   <Share2 className="w-4 h-4 text-gray-600" />
                 </button>
               </div>
             )}
           </div>
 
-          {/* Iframe or Placeholder */}
           <div className="relative w-full bg-gradient-to-br from-[#E8F2FF] to-[#E8F2FF] h-[75vh] min-h-[700px]">
             {tieneIframe ? (
               <iframe
@@ -245,7 +230,6 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
             )}
           </div>
 
-          {/* Bottom toolbar */}
           {tieneIframe && (
             <div className="flex items-center justify-between px-6 py-3 bg-[#F8F9FA] border-t border-gray-100 flex-wrap gap-3">
               <span className="text-xs text-gray-600 flex items-center gap-2">
@@ -253,12 +237,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
                 Los datos se actualizan siguiendo el cronograma institucional de indicadores.
               </span>
               <div className="flex gap-2">
-                <button
-                  onClick={handleDownload}
-                  className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
-                  title="Descargar imagen"
-                  aria-label="Descargar visualización como imagen"
-                >
+                <button onClick={handleDownload} className="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="Descargar imagen">
                   <Download className="w-4 h-4 text-gray-600" />
                 </button>
               </div>
@@ -270,38 +249,27 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-[#E8F2FF] flex items-center justify-center text-[#0176DE]">
-                🎯
-              </div>
-              <h3 className="font-bold text-gray-900" style={{ fontFamily: "Montserrat, sans-serif" }}>
-                Objetivo
-              </h3>
+              <div className="w-10 h-10 rounded-lg bg-[#E8F2FF] flex items-center justify-center text-[#0176DE]">🎯</div>
+              <h3 className="font-bold text-gray-900" style={{ fontFamily: "Montserrat, sans-serif" }}>Objetivo</h3>
             </div>
             <p className="text-sm text-gray-600 leading-relaxed">{indicador.objetivo || "Por definir"}</p>
           </div>
 
           <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#0891B2]">
-                📈
-              </div>
-              <h3 className="font-bold text-gray-900" style={{ fontFamily: "Montserrat, sans-serif" }}>
-                Fórmula
-              </h3>
+              <div className="w-10 h-10 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#0891B2]">📈</div>
+              <h3 className="font-bold text-gray-900" style={{ fontFamily: "Montserrat, sans-serif" }}>Fórmula</h3>
             </div>
             <div className="text-xs text-gray-600 leading-relaxed bg-gray-50 p-3 rounded overflow-x-auto">
-              <Latex>{`$$${indicador.formula || "Por definir"}$$`}</Latex>
+              {/* Usa la fórmula simplificada o la normal si la primera no está disponible */}
+              <Latex>{`$$${formulaSimplificada || indicador.formula || "Por definir"}$$`}</Latex>
             </div>
           </div>
 
           <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-[#D1FAE5] flex items-center justify-center text-[#065F46]">
-                📅
-              </div>
-              <h3 className="font-bold text-gray-900" style={{ fontFamily: "Montserrat, sans-serif" }}>
-                Periodicidad
-              </h3>
+              <div className="w-10 h-10 rounded-lg bg-[#D1FAE5] flex items-center justify-center text-[#065F46]">📅</div>
+              <h3 className="font-bold text-gray-900" style={{ fontFamily: "Montserrat, sans-serif" }}>Periodicidad</h3>
             </div>
             <p className="text-sm text-gray-600 leading-relaxed">
               Actualización <strong>{indicador.frecuenciaMedicion}</strong> de los datos según cronograma institucional.
@@ -322,20 +290,15 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
             <button
               className="w-full flex items-center justify-between px-6 py-4 hover:bg-[#E8F2FF] transition-colors"
               onClick={() => toggleAccordion("fuentes")}
-              aria-expanded={openAccordions.fuentes}
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#FEF3C7] flex items-center justify-center text-[#92400E]">
-                  📊
-                </div>
+                <div className="w-8 h-8 rounded-lg bg-[#FEF3C7] flex items-center justify-center text-[#92400E]">📊</div>
                 <div className="text-left">
                   <h3 className="font-bold text-gray-900">Fuentes de Datos</h3>
                   <p className="text-xs text-gray-500">Sistemas de origen y organismos productores</p>
                 </div>
               </div>
-              <ChevronDown
-                className={`w-5 h-5 text-gray-400 transition-transform ${openAccordions.fuentes ? "rotate-180" : ""}`}
-              />
+              <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openAccordions.fuentes ? "rotate-180" : ""}`} />
             </button>
 
             {openAccordions.fuentes && (
@@ -349,9 +312,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
                     <p className="text-xs text-gray-500 font-semibold mb-1">Fuentes de datos</p>
                     <ul className="space-y-1">
                       {indicador.fuentes.map((fuente, idx) => (
-                        <li key={idx} className="text-sm text-gray-700">
-                          • {fuente}
-                        </li>
+                        <li key={idx} className="text-sm text-gray-700">• {fuente}</li>
                       ))}
                     </ul>
                   </div>
@@ -373,20 +334,15 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
             <button
               className="w-full flex items-center justify-between px-6 py-4 hover:bg-[#E8F2FF] transition-colors"
               onClick={() => toggleAccordion("metodologia")}
-              aria-expanded={openAccordions.metodologia}
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#0891B2]">
-                  📐
-                </div>
+                <div className="w-8 h-8 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#0891B2]">📐</div>
                 <div className="text-left">
                   <h3 className="font-bold text-gray-900">Metodología</h3>
                   <p className="text-xs text-gray-500">Fórmula de cálculo e instructivo</p>
                 </div>
               </div>
-              <ChevronDown
-                className={`w-5 h-5 text-gray-400 transition-transform ${openAccordions.metodologia ? "rotate-180" : ""}`}
-              />
+              <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openAccordions.metodologia ? "rotate-180" : ""}`} />
             </button>
 
             {openAccordions.metodologia && (
@@ -396,10 +352,10 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
                     Fórmula Matemática
                   </h4>
 
-                  <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 mb-4 flex justify-center overflow-x-auto">
-                    <div className="text-center">
-                      <Latex>{`$$${indicador.formula || "Por definir"}$$`}</Latex>
-                    </div>
+                  <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 mb-4 flex justify-center overflow-x-auto min-h-[100px] items-center text-xl">
+                    <Latex>
+                      {`$$${(formulaSimplificada || indicador.formula || "Por definir").replace(/\*/g, "\\times")}$$`}
+                    </Latex>
                   </div>
 
                   {formulaLarga && (
@@ -409,37 +365,55 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
                     </div>
                   )}
 
-                  <div className="bg-white rounded-lg p-4 border border-gray-200">
-                    <p className="text-sm font-bold text-gray-900 mb-3">Donde:</p>
-                    <ul className="space-y-2 text-sm text-gray-700">
-                      <li className="flex gap-3">
-                        <span className="text-[#0176DE] font-bold">•</span>
-                        <span><strong>Numerador:</strong> Cantidad de elementos que cumplen el criterio de evaluación.</span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="text-[#0176DE] font-bold">•</span>
-                        <span><strong>Denominador:</strong> Total de elementos evaluados en el período (semestre/año).</span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="text-[#0176DE] font-bold">•</span>
-                        <span><strong>× 100:</strong> Factor de conversión a porcentaje (%).</span>
-                      </li>
-                    </ul>
-                  </div>
+                  {/* Renderizado dinámico de Variables */}
+                  {variables ? (
+                    <div className="bg-white rounded-lg p-4 border border-gray-200">
+                      <p className="text-sm font-bold text-gray-900 mb-3">Variables de la fórmula:</p>
+                      <ul className="space-y-3 text-sm text-gray-700">
+                        {variables.split(";").map((variable: string, index: number) => {
+                          const [simbolo, ...resto] = variable.split(":");
+                          const descripcion = resto.join(":").trim();
+
+                          if (!simbolo || !descripcion) return null;
+
+                          return (
+                            <li key={index} className="flex items-center gap-3 bg-gray-50 p-3 rounded-md border border-gray-100">
+                              <span className="font-bold text-[#0176DE] bg-[#E8F2FF] px-3 py-1 rounded text-center min-w-[60px]">
+                                <Latex>{`$${simbolo.trim()}$`}</Latex>
+                              </span>
+                              <span className="leading-relaxed">{descripcion}</span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-lg p-4 border border-gray-200">
+                      <p className="text-sm font-bold text-gray-900 mb-3">Donde:</p>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex gap-3">
+                          <span className="text-[#0176DE] font-bold">•</span>
+                          <span><strong>Numerador:</strong> Cantidad de elementos que cumplen el criterio de evaluación.</span>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-[#0176DE] font-bold">•</span>
+                          <span><strong>Denominador:</strong> Total de elementos evaluados en el período (semestre/año).</span>
+                        </li>
+                        <li className="flex gap-3">
+                          <span className="text-[#0176DE] font-bold">•</span>
+                          <span><strong>× 100:</strong> Factor de conversión a porcentaje (%).</span>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
 
                 {tieneInstructivo && (
                   <div>
                     <p className="text-xs text-gray-500 font-semibold mb-2">INSTRUCTIVO DETALLADO</p>
                     {instructivoEsUrl ? (
-                      <a
-                        href={indicador.instructivoCalculo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#0176DE] text-sm font-semibold hover:underline flex items-center gap-2"
-                      >
-                        📄 Ver documento de instructivo
-                        <ExternalLink className="w-3 h-3" />
+                      <a href={indicador.instructivoCalculo} target="_blank" rel="noopener noreferrer" className="text-[#0176DE] text-sm font-semibold hover:underline flex items-center gap-2">
+                        📄 Ver documento de instructivo <ExternalLink className="w-3 h-3" />
                       </a>
                     ) : (
                       <p className="text-sm text-gray-600 italic">{indicador.instructivoCalculo}</p>
@@ -461,20 +435,15 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
             <button
               className="w-full flex items-center justify-between px-6 py-4 hover:bg-[#E8F2FF] transition-colors"
               onClick={() => toggleAccordion("notas")}
-              aria-expanded={openAccordions.notas}
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#D1FAE5] flex items-center justify-center text-[#065F46]">
-                  ℹ️
-                </div>
+                <div className="w-8 h-8 rounded-lg bg-[#D1FAE5] flex items-center justify-center text-[#065F46]">ℹ️</div>
                 <div className="text-left">
                   <h3 className="font-bold text-gray-900">Información Técnica</h3>
                   <p className="text-xs text-gray-500">Detalles adicionales y contexto</p>
                 </div>
               </div>
-              <ChevronDown
-                className={`w-5 h-5 text-gray-400 transition-transform ${openAccordions.notas ? "rotate-180" : ""}`}
-              />
+              <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openAccordions.notas ? "rotate-180" : ""}`} />
             </button>
 
             {openAccordions.notas && (
