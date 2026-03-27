@@ -12,6 +12,8 @@ export interface Indicator {
   codigo: string;
   objetivo: string;
   formula: string;
+  formulaSimplificada: string | null;
+  variables: string | null;
   frecuenciaMedicion: string;
   estado: string;
   lineaBase: string | null;
