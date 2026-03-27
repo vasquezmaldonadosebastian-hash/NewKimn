@@ -3,6 +3,10 @@
  * Design: Estructura del Proto_observatorio_genero.html adaptada a React
  * Incluye: Hero, KPIs, Dashboard con iframe, Ficha técnica, Info cards
  * Mejoras: Fórmulas con variables dinámicas en LaTeX, instructivos completos, tipos seguros
+ *
+ * FIXES:
+ * 1. Tarjeta "Fórmula": cambiado a modo inline ($...$) + overflow-hidden para evitar scroll horizontal
+ * 2. formulaSimplificada: lectura robusta con fallback a camelCase por si el backend transforma claves
  */
 
 import { useState } from "react";
@@ -44,13 +48,18 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
 
   const instructivoEsUrl = tieneInstructivo && indicador.instructivoCalculo.startsWith("http");
 
-  // Detectar si la fórmula es larga (usamos la normal o la simplificada como fallback)
-  const formulaParaEvaluar = (indicador as any)["Formula simplificada"] || indicador.formula || "";
-  const formulaLarga = formulaParaEvaluar.length > 150;
+  // FIX 2: Lectura robusta de "Formula simplificada"
+  // El backend puede devolver la clave con espacio ("Formula simplificada") o en camelCase ("formulaSimplificada")
+  const formulaSimplificada =
+    (indicador as any)["Formula simplificada"] ||
+    (indicador as any).formulaSimplificada ||
+    null;
 
-  // Extraer valores dinámicos asumiendo que el tipo Indicator puede no tenerlos mapeados estrictamente aún
-  const formulaSimplificada = (indicador as any)["Formula simplificada"];
   const variables = (indicador as any).variables;
+
+  // Detectar si la fórmula es larga para mostrar nota informativa
+  const formulaParaEvaluar = formulaSimplificada || indicador.formula || "";
+  const formulaLarga = formulaParaEvaluar.length > 150;
 
   // Manejadores para controles de dashboard
   const handleRefresh = () => {
@@ -255,14 +264,16 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
             <p className="text-sm text-gray-600 leading-relaxed">{indicador.objetivo || "Por definir"}</p>
           </div>
 
+          {/* FIX 1: Tarjeta Fórmula — modo inline ($) + overflow-hidden para evitar scroll horizontal */}
           <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#0891B2]">📈</div>
               <h3 className="font-bold text-gray-900" style={{ fontFamily: "Montserrat, sans-serif" }}>Fórmula</h3>
             </div>
-            <div className="text-xs text-gray-600 leading-relaxed bg-gray-50 p-3 rounded overflow-x-auto">
-              {/* Usa la fórmula simplificada o la normal si la primera no está disponible */}
-              <Latex>{`$$${formulaSimplificada || indicador.formula || "Por definir"}$$`}</Latex>
+            <div className="bg-gray-50 p-3 rounded flex justify-center items-center min-h-[60px] overflow-hidden">
+              <span style={{ fontSize: "0.9rem" }}>
+                <Latex>{`$${formulaSimplificada || indicador.formula || "Por definir"}$`}</Latex>
+              </span>
             </div>
           </div>
 
