@@ -5,14 +5,14 @@
  * Mejoras: Fórmulas con variables dinámicas en LaTeX, instructivos completos, tipos seguros
  *
  * FIXES:
- * 1. Tarjeta "Fórmula": cambiado a modo inline ($...$) + overflow-hidden para evitar scroll horizontal
- * 2. formulaSimplificada: lectura robusta con fallback a camelCase por si el backend transforma claves
+ * 1. formulaSimplificada y variables ahora vienen tipados en Indicator (no más cast con any)
+ * 2. Tarjeta "Fórmula": modo inline ($) + overflow-hidden para evitar scroll horizontal
  */
 
 import { useState } from "react";
 import { ChevronDown, RefreshCw, Expand, Share2, Download, Info, ExternalLink } from "lucide-react";
 import Latex from "react-latex-next";
-import "katex/dist/katex.min.css"; // Importante para que el LaTeX se renderice correctamente
+import "katex/dist/katex.min.css";
 import type { Indicator } from "@shared/types";
 
 interface IndicadorDetailProps {
@@ -28,16 +28,11 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
   const [, setIsFullscreen] = useState(false);
 
   const toggleAccordion = (id: string) => {
-    setOpenAccordions((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    setOpenAccordions((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Determinar si tiene iframe basado en iframeSrc
   const tieneIframe = indicador.iframeSrc && indicador.iframeSrc.length > 0;
 
-  // Validar instructivo
   const tieneInstructivo =
     indicador.instructivoCalculo &&
     indicador.instructivoCalculo !== "falta" &&
@@ -48,29 +43,19 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
 
   const instructivoEsUrl = tieneInstructivo && indicador.instructivoCalculo.startsWith("http");
 
-  // FIX 2: Lectura robusta de "Formula simplificada"
-  // El backend puede devolver la clave con espacio ("Formula simplificada") o en camelCase ("formulaSimplificada")
-  const formulaSimplificada =
-    (indicador as any)["Formula simplificada"] ||
-    (indicador as any).formulaSimplificada ||
-    null;
+  // Campos tipados directamente desde el servicio
+  const formulaSimplificada = indicador.formulaSimplificada;
+  const variables = indicador.variables;
 
-  const variables = (indicador as any).variables;
+  // La fórmula a mostrar: simplificada si existe, si no la completa
+  const formulaMostrar = formulaSimplificada || indicador.formula || "Por definir";
+  const formulaLarga = formulaMostrar.length > 150;
 
-  // Detectar si la fórmula es larga para mostrar nota informativa
-  const formulaParaEvaluar = formulaSimplificada || indicador.formula || "";
-  const formulaLarga = formulaParaEvaluar.length > 150;
-
-  // Manejadores para controles de dashboard
   const handleRefresh = () => {
-    if (tieneIframe) {
-      const iframes = document.querySelectorAll("iframe[title='Dashboard']");
-      iframes.forEach((iframe) => {
-        if (iframe instanceof HTMLIFrameElement) {
-          iframe.src = iframe.src;
-        }
-      });
-    }
+    const iframes = document.querySelectorAll("iframe[title='Dashboard']");
+    iframes.forEach((iframe) => {
+      if (iframe instanceof HTMLIFrameElement) iframe.src = iframe.src;
+    });
   };
 
   const handleFullscreen = () => {
@@ -82,11 +67,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
 
   const handleShare = () => {
     if (navigator.share) {
-      navigator.share({
-        title: indicador.titulo,
-        text: indicador.descripcion,
-        url: window.location.href,
-      });
+      navigator.share({ title: indicador.titulo, text: indicador.descripcion, url: window.location.href });
     } else {
       navigator.clipboard.writeText(window.location.href);
       alert("URL copiada al portapapeles");
@@ -109,30 +90,17 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
             <span>📊</span> Indicador {indicador.codigo}
           </div>
 
-          <h1
-            className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight"
-            style={{ fontFamily: "Montserrat, sans-serif" }}
-          >
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight" style={{ fontFamily: "Montserrat, sans-serif" }}>
             {indicador.titulo}
           </h1>
 
-          <p className="text-lg text-white/80 max-w-2xl leading-relaxed mb-8">
-            {indicador.descripcion}
-          </p>
+          <p className="text-lg text-white/80 max-w-2xl leading-relaxed mb-8">{indicador.descripcion}</p>
 
           <div className="flex gap-4 flex-wrap">
-            <button
-              onClick={handleDownload}
-              className="px-6 py-3 bg-white text-[#03122E] font-bold rounded-lg hover:shadow-lg transition-all"
-              title="Descargar datos del indicador"
-            >
+            <button onClick={handleDownload} className="px-6 py-3 bg-white text-[#03122E] font-bold rounded-lg hover:shadow-lg transition-all" title="Descargar datos del indicador">
               Explorar Datos
             </button>
-            <button
-              onClick={handleDownload}
-              className="px-6 py-3 bg-transparent border-2 border-white/40 text-white font-semibold rounded-lg hover:bg-white/12 transition-all"
-              title="Descargar reporte en PDF"
-            >
+            <button onClick={handleDownload} className="px-6 py-3 bg-transparent border-2 border-white/40 text-white font-semibold rounded-lg hover:bg-white/12 transition-all" title="Descargar reporte en PDF">
               Descargar Reporte
             </button>
           </div>
@@ -140,13 +108,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
       </section>
 
       {/* ═══ WAVE SEPARATOR ═══ */}
-      <div
-        className="w-full h-12 bg-[#F8F9FA]"
-        style={{
-          clipPath: "ellipse(55% 100% at 50% 0%)",
-          marginTop: "-1px",
-        }}
-      />
+      <div className="w-full h-12 bg-[#F8F9FA]" style={{ clipPath: "ellipse(55% 100% at 50% 0%)", marginTop: "-1px" }} />
 
       {/* ═══ MAIN CONTENT ═══ */}
       <div className="max-w-6xl mx-auto px-6 py-12">
@@ -154,23 +116,16 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
           <div className="bg-white rounded-lg p-6 shadow-sm border-l-4 border-[#0176DE]">
             <div className="text-sm text-gray-500 mb-2">Unidad de Medida</div>
-            <div className="text-3xl font-black text-[#03122E]" style={{ fontFamily: "Montserrat, sans-serif" }}>
-              {indicador.unidad || "N/A"}
-            </div>
+            <div className="text-3xl font-black text-[#03122E]" style={{ fontFamily: "Montserrat, sans-serif" }}>{indicador.unidad || "N/A"}</div>
           </div>
-
           <div className="bg-white rounded-lg p-6 shadow-sm border-l-4 border-[#0891B2]">
             <div className="text-sm text-gray-500 mb-2">Frecuencia</div>
-            <div className="text-2xl font-bold text-[#0891B2]" style={{ fontFamily: "Montserrat, sans-serif" }}>
-              {indicador.frecuenciaMedicion || "N/A"}
-            </div>
+            <div className="text-2xl font-bold text-[#0891B2]" style={{ fontFamily: "Montserrat, sans-serif" }}>{indicador.frecuenciaMedicion || "N/A"}</div>
           </div>
-
           <div className="bg-white rounded-lg p-6 shadow-sm border-l-4 border-[#065F46]">
             <div className="text-sm text-gray-500 mb-2">Estado</div>
             <div className="text-lg font-bold text-[#065F46]">{indicador.estado || "N/A"}</div>
           </div>
-
           <div className="bg-white rounded-lg p-6 shadow-sm border-l-4 border-[#92400E]">
             <div className="text-sm text-gray-500 mb-2">Corte de Datos</div>
             <div className="text-sm font-semibold text-[#92400E]">
@@ -191,18 +146,11 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
                 <div className="text-xs text-gray-500">Fuente: {indicador.fuenteAdministrativa || "Por definir"}</div>
               </div>
             </div>
-
             {tieneIframe && (
               <div className="flex items-center gap-2">
-                <button onClick={handleRefresh} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Actualizar dashboard">
-                  <RefreshCw className="w-4 h-4 text-gray-600" />
-                </button>
-                <button onClick={handleFullscreen} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Pantalla completa">
-                  <Expand className="w-4 h-4 text-gray-600" />
-                </button>
-                <button onClick={handleShare} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Compartir">
-                  <Share2 className="w-4 h-4 text-gray-600" />
-                </button>
+                <button onClick={handleRefresh} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Actualizar dashboard"><RefreshCw className="w-4 h-4 text-gray-600" /></button>
+                <button onClick={handleFullscreen} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Pantalla completa"><Expand className="w-4 h-4 text-gray-600" /></button>
+                <button onClick={handleShare} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Compartir"><Share2 className="w-4 h-4 text-gray-600" /></button>
               </div>
             )}
           </div>
@@ -226,9 +174,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
                 <div className="w-20 h-20 rounded-3xl bg-[#E8F2FF] flex items-center justify-center mb-6">
                   <span className="text-4xl">📊</span>
                 </div>
-                <h3 className="text-xl font-bold text-[#4B5563] mb-3" style={{ fontFamily: "Montserrat, sans-serif" }}>
-                  Visualización por Configurar
-                </h3>
+                <h3 className="text-xl font-bold text-[#4B5563] mb-3" style={{ fontFamily: "Montserrat, sans-serif" }}>Visualización por Configurar</h3>
                 <p className="text-center text-gray-500 max-w-md mb-6">
                   Este indicador aún no cuenta con una visualización interactiva. La integración del dashboard de Power BI o Tableau está en proceso.
                 </p>
@@ -246,9 +192,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
                 Los datos se actualizan siguiendo el cronograma institucional de indicadores.
               </span>
               <div className="flex gap-2">
-                <button onClick={handleDownload} className="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="Descargar imagen">
-                  <Download className="w-4 h-4 text-gray-600" />
-                </button>
+                <button onClick={handleDownload} className="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="Descargar imagen"><Download className="w-4 h-4 text-gray-600" /></button>
               </div>
             </div>
           )}
@@ -256,6 +200,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
 
         {/* ── Info Cards ── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* Objetivo */}
           <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-lg bg-[#E8F2FF] flex items-center justify-center text-[#0176DE]">🎯</div>
@@ -264,7 +209,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
             <p className="text-sm text-gray-600 leading-relaxed">{indicador.objetivo || "Por definir"}</p>
           </div>
 
-          {/* FIX 1: Tarjeta Fórmula — modo inline ($) + overflow-hidden para evitar scroll horizontal */}
+          {/* FIX: Tarjeta Fórmula — modo inline ($) + overflow-hidden */}
           <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#0891B2]">📈</div>
@@ -272,11 +217,12 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
             </div>
             <div className="bg-gray-50 p-3 rounded flex justify-center items-center min-h-[60px] overflow-hidden">
               <span style={{ fontSize: "0.9rem" }}>
-                <Latex>{`$${formulaSimplificada || indicador.formula || "Por definir"}$`}</Latex>
+                <Latex>{`$${formulaMostrar}$`}</Latex>
               </span>
             </div>
           </div>
 
+          {/* Periodicidad */}
           <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-lg bg-[#D1FAE5] flex items-center justify-center text-[#065F46]">📅</div>
@@ -298,10 +244,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
 
           {/* Acordeón 1: Fuentes de Datos */}
           <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-3">
-            <button
-              className="w-full flex items-center justify-between px-6 py-4 hover:bg-[#E8F2FF] transition-colors"
-              onClick={() => toggleAccordion("fuentes")}
-            >
+            <button className="w-full flex items-center justify-between px-6 py-4 hover:bg-[#E8F2FF] transition-colors" onClick={() => toggleAccordion("fuentes")}>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-[#FEF3C7] flex items-center justify-center text-[#92400E]">📊</div>
                 <div className="text-left">
@@ -342,10 +285,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
 
           {/* Acordeón 2: Metodología */}
           <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-3">
-            <button
-              className="w-full flex items-center justify-between px-6 py-4 hover:bg-[#E8F2FF] transition-colors"
-              onClick={() => toggleAccordion("metodologia")}
-            >
+            <button className="w-full flex items-center justify-between px-6 py-4 hover:bg-[#E8F2FF] transition-colors" onClick={() => toggleAccordion("metodologia")}>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-[#E0F2FE] flex items-center justify-center text-[#0891B2]">📐</div>
                 <div className="text-left">
@@ -364,9 +304,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
                   </h4>
 
                   <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 mb-4 flex justify-center overflow-x-auto min-h-[100px] items-center text-xl">
-                    <Latex>
-                      {`$$${(formulaSimplificada || indicador.formula || "Por definir").replace(/\*/g, "\\times")}$$`}
-                    </Latex>
+                    <Latex>{`$$${formulaMostrar.replace(/\*/g, "\\times")}$$`}</Latex>
                   </div>
 
                   {formulaLarga && (
@@ -376,7 +314,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
                     </div>
                   )}
 
-                  {/* Renderizado dinámico de Variables */}
+                  {/* Variables dinámicas */}
                   {variables ? (
                     <div className="bg-white rounded-lg p-4 border border-gray-200">
                       <p className="text-sm font-bold text-gray-900 mb-3">Variables de la fórmula:</p>
@@ -384,9 +322,7 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
                         {variables.split(";").map((variable: string, index: number) => {
                           const [simbolo, ...resto] = variable.split(":");
                           const descripcion = resto.join(":").trim();
-
                           if (!simbolo || !descripcion) return null;
-
                           return (
                             <li key={index} className="flex items-center gap-3 bg-gray-50 p-3 rounded-md border border-gray-100">
                               <span className="font-bold text-[#0176DE] bg-[#E8F2FF] px-3 py-1 rounded text-center min-w-[60px]">
@@ -402,18 +338,9 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
                     <div className="bg-white rounded-lg p-4 border border-gray-200">
                       <p className="text-sm font-bold text-gray-900 mb-3">Donde:</p>
                       <ul className="space-y-2 text-sm text-gray-700">
-                        <li className="flex gap-3">
-                          <span className="text-[#0176DE] font-bold">•</span>
-                          <span><strong>Numerador:</strong> Cantidad de elementos que cumplen el criterio de evaluación.</span>
-                        </li>
-                        <li className="flex gap-3">
-                          <span className="text-[#0176DE] font-bold">•</span>
-                          <span><strong>Denominador:</strong> Total de elementos evaluados en el período (semestre/año).</span>
-                        </li>
-                        <li className="flex gap-3">
-                          <span className="text-[#0176DE] font-bold">•</span>
-                          <span><strong>× 100:</strong> Factor de conversión a porcentaje (%).</span>
-                        </li>
+                        <li className="flex gap-3"><span className="text-[#0176DE] font-bold">•</span><span><strong>Numerador:</strong> Cantidad de elementos que cumplen el criterio de evaluación.</span></li>
+                        <li className="flex gap-3"><span className="text-[#0176DE] font-bold">•</span><span><strong>Denominador:</strong> Total de elementos evaluados en el período (semestre/año).</span></li>
+                        <li className="flex gap-3"><span className="text-[#0176DE] font-bold">•</span><span><strong>× 100:</strong> Factor de conversión a porcentaje (%).</span></li>
                       </ul>
                     </div>
                   )}
@@ -441,12 +368,9 @@ export default function IndicadorDetail({ indicador }: IndicadorDetailProps) {
             )}
           </div>
 
-          {/* Acordeón 3: Notas Técnicas */}
+          {/* Acordeón 3: Información Técnica */}
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <button
-              className="w-full flex items-center justify-between px-6 py-4 hover:bg-[#E8F2FF] transition-colors"
-              onClick={() => toggleAccordion("notas")}
-            >
+            <button className="w-full flex items-center justify-between px-6 py-4 hover:bg-[#E8F2FF] transition-colors" onClick={() => toggleAccordion("notas")}>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-[#D1FAE5] flex items-center justify-center text-[#065F46]">ℹ️</div>
                 <div className="text-left">
