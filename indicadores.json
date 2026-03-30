@@ -13,7 +13,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Faltante",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ n_{ng} }{ N_{np} } \\right) \\times 100",
+    "variables": "n_{ng}: Normas con Género; N_{np}: Normas Priorizadas",
+    "fuenteAdministrativa": "Secretaria General",
+    "responsableCalculo": "Obs Género",
+    "responsableVerificar": "OEG Oficina de atención",
+    "instructivoCalculo": "https://drive.google.com/file/d/1P7b-CAxhI4b7pJcFeAtDbTDzE5InSsoC/view?usp=drive_link",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 2,
@@ -29,7 +36,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Oficializado",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ v_{g} }{ V_{t} } \\right) \\times 100",
+    "variables": "v_{g}: Visualizaciones con Género; V_{t}: Total Visualizaciones",
+    "fuenteAdministrativa": "DGOB",
+    "responsableCalculo": "OEG",
+    "responsableVerificar": "DGOB",
+    "instructivoCalculo": "https://drive.google.com/file/d/1EvA-1sUn5O23c3MmO7PPKvscG9lo63Cf/view?usp=drive_link",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 3,
@@ -45,7 +59,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Faltante",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ a_{f} }{ A_{t} } \\right) \\times 100",
+    "variables": "a_{f}: Autoridades Formadas; A_{t}: Total Autoridades",
+    "fuenteAdministrativa": "DG",
+    "responsableCalculo": "OEG",
+    "responsableVerificar": "DG",
+    "instructivoCalculo": "falta",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 4,
@@ -61,7 +82,14 @@
     "frecuenciaMedicion": "Bienal",
     "estado": "Oficializado",
     "lineaBase": 0.427,
-    "enlaceVisualizacion": "https://app.powerbi.com/view?r=eyJrIjoiODY2ZGRjNGEtZDEzMC00ZmMyLWFlY2YtOGM3N2E1ZTMwODFkIiwidCI6IjBkODQ5NzNiLThiYjctNDQ1OC05YzI5LTIxZmFiNDZmMTUyYyIsImMiOjR9&pageName=69cd2d313a87a0e17e24"
+    "enlaceVisualizacion": "https://app.powerbi.com/view?r=eyJrIjoiODY2ZGRjNGEtZDEzMC00ZmMyLWFlY2YtOGM3N2E1ZTMwODFkIiwidCI6IjBkODQ5NzNiLThiYjctNDQ1OC05YzI5LTIxZmFiNDZmMTUyYyIsImMiOjR9&pageName=69cd2d313a87a0e17e24",
+    "formulaSimplificada": "\\left( \\frac{ p_{c} }{ P_{r} } \\right) \\times 100",
+    "variables": "p_{c}: Personas que conocen; P_{r}: Total Respuestas",
+    "fuenteAdministrativa": "OEG",
+    "responsableCalculo": "OEG",
+    "responsableVerificar": "OAA",
+    "instructivoCalculo": "https://drive.google.com/file/d/1PEE2ye8jg-Pnp7dnkTYEk7vbuwWRsrn1/view?usp=drive_link",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 5,
@@ -77,7 +105,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Faltante",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "(I_{oaa} \\times 0.5) + (I_{sg} \\times 0.5)",
+    "variables": "I_{oaa}: Índice Acompañamiento; I_{sg}: Índice Secretaría Gral.",
+    "fuenteAdministrativa": "OAA",
+    "responsableCalculo": "OEG",
+    "responsableVerificar": "OAA",
+    "instructivoCalculo": "A la espera de validación",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 6,
@@ -93,7 +128,14 @@
     "frecuenciaMedicion": "Bienal",
     "estado": "Faltante",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ k_{f} }{ K_{t} } \\right) \\times 100",
+    "variables": "k_{f}: Actores Clave Formados; K_{t}: Total Actores Clave",
+    "fuenteAdministrativa": "Obs. Género",
+    "responsableCalculo": "OEG",
+    "responsableVerificar": "OAA",
+    "instructivoCalculo": "",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 7,
@@ -109,7 +151,14 @@
     "frecuenciaMedicion": "Bienal",
     "estado": "Oficializado",
     "lineaBase": 0,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "(0.5 \\times U) + (0.5 \\times S)",
+    "variables": "U: Grado de Uso; S: Grado de Satisfacción",
+    "fuenteAdministrativa": "Obs. Género",
+    "responsableCalculo": "OEG",
+    "responsableVerificar": "DDPER",
+    "instructivoCalculo": "https://docs.google.com/document/d/1cejVFv3gzpjNU-sDFs-wDP6JzIwa-GdV/edit?usp=sharing&ouid=100736699336938496947&rtpof=true&sd=true",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 8,
@@ -125,7 +174,14 @@
     "frecuenciaMedicion": "Bienal",
     "estado": "Oficializado",
     "lineaBase": 0.656,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "T_{m} - T_{h}",
+    "variables": "T_{m}: Tasa uso mujeres; T_{h}: Tasa uso hombres",
+    "fuenteAdministrativa": "DG",
+    "responsableCalculo": "OEG",
+    "responsableVerificar": "DG",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 9,
@@ -141,7 +197,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Oficializado",
     "lineaBase": 0.28,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ m_{i} }{ T_{i} } \\right) \\times 100",
+    "variables": "m_{i}: Mujeres en Investigación; T_{i}: Total planta Investigación",
+    "fuenteAdministrativa": "PENDIENTE",
+    "responsableCalculo": "PENDIENTE",
+    "responsableVerificar": "PENDIENTE",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 10,
@@ -157,7 +220,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Faltante",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ m_{l} }{ L_{t} } \\right) \\times 100",
+    "variables": "m_{l}: Mujeres en Liderazgo; L_{t}: Total cargos Liderazgo",
+    "fuenteAdministrativa": "PENDIENTE",
+    "responsableCalculo": "PENDIENTE",
+    "responsableVerificar": "PENDIENTE",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 11,
@@ -173,7 +243,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Faltante",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ s_{f} }{ S_{t} } \\right) \\times 100",
+    "variables": "s_{f}: Personal Soporte Formado; S_{t}: Total Personal Soporte",
+    "fuenteAdministrativa": "PENDIENTE",
+    "responsableCalculo": "PENDIENTE",
+    "responsableVerificar": "PENDIENTE",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 12,
@@ -189,7 +266,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Faltante",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ l_{g} }{ L_{v} } \\right) \\times 100",
+    "variables": "l_{g}: Líneas con Género; L_{v}: Total Líneas Vigentes",
+    "fuenteAdministrativa": "PENDIENTE",
+    "responsableCalculo": "PENDIENTE",
+    "responsableVerificar": "PENDIENTE",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 13,
@@ -205,7 +289,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Faltante",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ c_{g} }{ C_{t} } \\right) \\times 100",
+    "variables": "c_{g}: Carreras con Género; C_{t}: Total Carreras Pregrado",
+    "fuenteAdministrativa": "PENDIENTE",
+    "responsableCalculo": "PENDIENTE",
+    "responsableVerificar": "PENDIENTE",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 14,
@@ -221,7 +312,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Faltante",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ g_{p} }{ G_{t} } \\right) \\times 100",
+    "variables": "g_{p}: Posgrados con Género; G_{t}: Total Programas Posgrado",
+    "fuenteAdministrativa": "PENDIENTE",
+    "responsableCalculo": "PENDIENTE",
+    "responsableVerificar": "PENDIENTE",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 15,
@@ -237,7 +335,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Faltante",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ d_{f} }{ D_{t} } \\right) \\times 100",
+    "variables": "d_{f}: Docentes Formados; D_{t}: Total Docentes UCT",
+    "fuenteAdministrativa": "PENDIENTE",
+    "responsableCalculo": "PENDIENTE",
+    "responsableVerificar": "PENDIENTE",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 16,
@@ -253,7 +358,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Oficializado",
     "lineaBase": "0.48 Scopus / 0.43 WOS",
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ m_{pc} }{ T_{pc} } \\right) \\times 100",
+    "variables": "m_{pc}: Mujeres lideran Pub.; T_{pc}: Total líderes Pub.",
+    "fuenteAdministrativa": "PENDIENTE",
+    "responsableCalculo": "PENDIENTE",
+    "responsableVerificar": "PENDIENTE",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 17,
@@ -269,7 +381,14 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Oficializado",
     "lineaBase": 0,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ p_{m} }{ P_{t} } \\right) \\times 100",
+    "variables": "p_{m}: Postulaciones Mujeres; P_{t}: Total Postulaciones Innov.",
+    "fuenteAdministrativa": "PENDIENTE",
+    "responsableCalculo": "PENDIENTE",
+    "responsableVerificar": "PENDIENTE",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 18,
@@ -285,7 +404,14 @@
     "frecuenciaMedicion": "Semestral",
     "estado": "Oficializado",
     "lineaBase": 0,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ n_{p} }{ N_{t} } \\right) \\times 100",
+    "variables": "n_{p}: Notas con Género; N_{t}: Total Notas Realizadas",
+    "fuenteAdministrativa": "PENDIENTE",
+    "responsableCalculo": "PENDIENTE",
+    "responsableVerificar": "PENDIENTE",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   },
   {
     "id": 19,
@@ -301,6 +427,13 @@
     "frecuenciaMedicion": "Anual",
     "estado": "Faltante",
     "lineaBase": null,
-    "enlaceVisualizacion": null
+    "enlaceVisualizacion": null,
+    "formulaSimplificada": "\\left( \\frac{ a_{m} }{ A_{m} } \\right) \\times 100",
+    "variables": "a_{m}: Académicas en Movilidad; A_{m}: Total Académicos Movilidad",
+    "fuenteAdministrativa": "PENDIENTE",
+    "responsableCalculo": "PENDIENTE",
+    "responsableVerificar": "PENDIENTE",
+    "instructivoCalculo": "-",
+    "fechaCorte": "2025-12-30"
   }
 ]
