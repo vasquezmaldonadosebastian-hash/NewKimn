@@ -51,7 +51,7 @@ export default function HeaderUCT() {
       </div>
 
       {/* ═══ MAIN HEADER (Gris/Blanco) ═══ */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-6">
             
@@ -59,7 +59,7 @@ export default function HeaderUCT() {
             <Link href="/">
               <div className="cursor-pointer hover:opacity-90 transition-opacity">
                 <img 
-                  src="/__manus__/logo-uct.gif" 
+                  src="/__manus__/LogoKimnObs.png" 
                   alt="Logo KIMN" 
                   className="h-10 md:h-14 w-auto object-contain" 
                 />
