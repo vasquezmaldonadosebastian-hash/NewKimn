@@ -21,6 +21,7 @@ export default function HeaderUCT() {
     { label: "INDICADORES", href: "/indicadores" },
     { label: "GLOSARIO", href: "/glosario" },
     { label: "CONTACTO", href: "/contacto" },
+    { label: "CALENDARIO", href: "/calendario" },
   ];
 
   return (
