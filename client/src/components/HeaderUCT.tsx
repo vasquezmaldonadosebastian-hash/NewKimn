@@ -61,7 +61,7 @@ export default function HeaderUCT() {
                 <img 
                   src="/__manus__/LogoKimnObs.png" 
                   alt="Logo KIMN" 
-                  className="h-5 md:h-14 w-auto object-contain" 
+                  className="h-20 md:h-28 w-auto object-contain" 
                 />
               </div>
             </Link>
