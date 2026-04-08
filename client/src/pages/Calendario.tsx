@@ -43,7 +43,7 @@ export default function Calendario() {
 
             {/* Description */}
             <p className="text-sm lg:text-base text-white/90 leading-relaxed max-w-3xl">
-              El calendario de actualizaciones constituye una herramienta estratégica de comunicación que permite a la Universidad Católica de Temuco mantener informadas a las personas e instituciones interesadas sobre el itinerario de actualización de sus indicadores. A través de este calendario, los usuarios pueden acceder de manera centralizada y en tiempo real a fechas relevantes, hitos de publicación y procesos de actualización, facilitando la planificación, el seguimiento y la toma de decisiones. De esta forma, se promueve la transparencia, la coordinación interinstitucional y el acceso oportuno a información clave a nivel nacional.
+              El calendario de actualización de indicadores de género es una herramienta estratégica de comunicación que permite a la Universidad Católica de Temuco informar oportunamente a personas e instituciones interesadas sobre las fechas y procesos de actualización de estos indicadores. Facilita la planificación, el seguimiento y la toma de decisiones con enfoque de género, promoviendo la transparencia, la coordinación interinstitucional y el acceso equitativo a información clave a nivel nacional.
             </p>
           </div>
         </div>
