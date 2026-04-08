@@ -50,12 +50,12 @@ export default function Calendario() {
       </section>
 
       {/* ─── CALENDAR CONTENT ─── */}
-      <section className="container py-12 flex flex-col items-center">
-        <div className="w-full max-w-4xl overflow-hidden rounded-lg shadow-sm border border-gray-200 bg-white p-4 mb-8">
-          <div className="aspect-video w-full">
+      <section className="w-full py-12 px-4 flex flex-col items-center">
+        <div className="w-full max-w-7xl overflow-hidden rounded-lg shadow-sm border border-gray-200 bg-white p-4 mb-8">
+          <div className="w-full overflow-x-auto">
             <iframe 
-              src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=America%2FSantiago&showPrint=0&showTitle=0&showCalendars=0&src=OTJhOTEwN2JhOGRlNTZkOGY5ZDczODA5ZGY3OTI0M2QxNTM1ZGQzMjAxNjhmN2I0YzQwMzI3NTllZTFmYTRkZkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZXMuY2wjaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&src=c3VlbWs5MDdoOXVrbDllZmM0Mzgxb2dobGNvcDI5MG1AaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTE2NTI3ODQwNjkzMTI5MDM0MTM0QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%234285f4&color=%230b8043&color=%23f09300&color=%23004d40" 
-              style={{ border: "0" }} 
+              src="https://calendar.google.com/calendar/embed?src=c_7aa6cfd290f787a674e8f2bed624e22ee309900e32135a3c9c3678eafa5e9a63%40group.calendar.google.com&ctz=America%2FSantiago" 
+              style={{ border: "0", minWidth: "800px" }} 
               width="100%" 
               height="600" 
               frameBorder="0" 
@@ -68,7 +68,7 @@ export default function Calendario() {
         {/* Add Calendar Button */}
         <div className="flex justify-center">
           <a 
-            href="https://calendar.google.com/calendar/u/1?cid=OTJhOTEwN2JhOGRlNTZkOGY5ZDczODA5ZGY3OTI0M2QxNTM1ZGQzMjAxNjhmN2I0YzQwMzI3NTllZTFmYTRkZkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
+            href="https://calendar.google.com/calendar/u/0?cid=c_7aa6cfd290f787a674e8f2bed624e22ee309900e32135a3c9c3678eafa5e9a63%40group.calendar.google.com"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center px-6 py-2.5 bg-[#0176DE] text-white font-semibold rounded-md hover:bg-[#0165c0] transition-colors shadow-sm text-sm"
