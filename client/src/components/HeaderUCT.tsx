@@ -51,7 +51,7 @@ export default function HeaderUCT() {
       </div>
 
       {/* ═══ MAIN HEADER (Gris/Blanco) ═══ */}
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+      <header className="bg-gray-600 border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-6">
             
