@@ -35,6 +35,7 @@ const mapItem = (item: any): Indicator => {
     estado: item.estado ?? item["Estado del Indicador"] ?? "",
     lineaBase: (!item.lineaBase || item.lineaBase === "None") ? null : item.lineaBase,
     dimension: item.dimension ?? item["Dimensión"] ?? "",
+    area: item.area ?? item["Área"] ?? "",
     fechaCorte: item.fechaCorte ?? item["Fecha de Corte"] ?? "",
 
     fuentes: item.fuente ? [item.fuente] : item["Fuente de Dato"] ? [item["Fuente de Dato"]] : [],

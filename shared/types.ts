@@ -18,6 +18,7 @@ export interface Indicator {
   estado: string;
   lineaBase: string | null;
   dimension: string;
+  area: string;
   fuenteAdministrativa: string;
   responsableCalculo: string;
   responsableVerificar: string;

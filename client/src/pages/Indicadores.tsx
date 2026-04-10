@@ -10,18 +10,6 @@ import { ChevronRight, Search, Filter, X } from "lucide-react";
 import { useIndicatorsContext } from "@/contexts/IndicatorsContext";
 import type { Indicator } from "@shared/types";
 
-// ✅ Constantes fuera del componente para evitar problemas de inicialización
-const AREA_NAMES: Record<string, string> = {
-  "1": "1.- Institucionalización",
-  "2": "2.- Violencia de Género",
-  "3": "3.- Corresponsabilidad en los cuidados",
-  "4": "4.- Trayectorias laborales",
-  "5": "5.- Trayectorias educativas",
-  "6": "6.- Modelo educativo con perspectiva de género",
-  "7": "7.- Divulgación Científica",
-  "8": "8.- Mujeres en Conocimiento",
-};
-
 const COLOR_MAP: Record<string, { bg: string; border: string; text: string }> = {
   "1.- Institucionalización": { bg: "#E8F2FF", border: "#E5D4F0", text: "#0176DE" },
   "2.- Violencia de Género": { bg: "#FEE2E2", border: "#FECACA", text: "#DC2626" },
@@ -50,25 +38,22 @@ export default function Indicadores() {
     if (areaParam) setFilterArea(areaParam);
   }, []);
 
-  // ✅ Áreas únicas con Type Guard seguro
+  // ✅ Áreas únicas reales desde el campo 'area' del JSON
   const areas = useMemo(() => {
     const uniqueAreas = Array.from(
       new Set(
         indicators
-          .map((ind) => {
-            const match = ind.dimension?.match(/^(\d+)\./);
-            return match ? match[1] : null;
-          })
-          .filter((area): area is string => area !== null)
+          .map((ind) => ind.area)
+          .filter((area): area is string => !!area)
       )
     ).sort();
     return ["todos", ...uniqueAreas];
   }, [indicators]);
 
-  // ✅ Dimensiones únicas con Type Guard seguro
+  // ✅ Dimensiones únicas
   const dimensiones = useMemo(() => {
     const uniqueDimensions = Array.from(
-      new Set(indicators.map((ind) => ind.dimension).filter((d): d is string => d !== undefined && d !== null))
+      new Set(indicators.map((ind) => ind.dimension).filter((d): d is string => !!d))
     ).sort();
     return ["todos", ...uniqueDimensions];
   }, [indicators]);
@@ -80,7 +65,7 @@ export default function Indicadores() {
         ind.codigo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         ind.descripcion?.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesArea = filterArea === "todos" || (ind.dimension?.includes(filterArea) ?? false);
+      const matchesArea = filterArea === "todos" || ind.area === filterArea;
       const matchesDimension = filterDimension === "todos" || ind.dimension === filterDimension;
 
       return matchesSearch && matchesArea && matchesDimension;
@@ -127,8 +112,8 @@ export default function Indicadores() {
             <Filter className="w-5 h-5 text-gray-400" />
             <select value={filterArea} onChange={(e) => setFilterArea(e.target.value)} className="flex-1 px-4 py-2.5 border border-[#E8F2FF] rounded-lg text-sm">
               <option value="todos">Todas las áreas</option>
-              {areas.map((area) => (
-                <option key={area} value={area}>{area === "todos" ? "Todas las áreas" : AREA_NAMES[area] || `Área ${area}`}</option>
+              {areas.filter(a => a !== "todos").map((area) => (
+                <option key={area} value={area}>{area}</option>
               ))}
             </select>
           </div>
@@ -136,8 +121,9 @@ export default function Indicadores() {
           <div className="flex items-center gap-2">
             <Filter className="w-5 h-5 text-gray-400" />
             <select value={filterDimension} onChange={(e) => setFilterDimension(e.target.value)} className="flex-1 px-4 py-2.5 border border-[#E8F2FF] rounded-lg text-sm">
-              {dimensiones.map((dimension) => (
-                <option key={dimension} value={dimension}>{dimension === "todos" ? "Todas las dimensiones" : dimension}</option>
+              <option value="todos">Todas las dimensiones</option>
+              {dimensiones.filter(d => d !== "todos").map((dimension) => (
+                <option key={dimension} value={dimension}>{dimension}</option>
               ))}
             </select>
           </div>
@@ -155,6 +141,7 @@ export default function Indicadores() {
                         <span className="px-2.5 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: color.text, color: "white" }}>{indicador.codigo}</span>
                         <span className="text-xs font-semibold text-gray-500">{indicador.frecuenciaMedicion}</span>
                       </div>
+                      <p className="text-[10px] uppercase tracking-wider font-bold text-gray-500 mb-1">{indicador.area}</p>
                       <p className="text-xs text-gray-600">{indicador.dimension}</p>
                     </div>
                     <div className="p-5">
