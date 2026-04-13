@@ -86,7 +86,7 @@ export const initializeIndicators = (data: any[], reportsData: any[] = []) => {
 };
 
 export const getIndicators = (): Indicator[] => indicators;
-export const const getIndicator = (id: string): Indicator | undefined => indicators.find((ind) => ind.id === id);
+export const getIndicator = (id: string): Indicator | undefined => indicators.find((ind) => ind.id === id);
 export const getCategories = (): IndicatorCategory[] => categories;
 export const getIndicatorsByCategory = (categoryId: string): Indicator[] => {
   const category = categories.find((cat) => cat.id === categoryId);
