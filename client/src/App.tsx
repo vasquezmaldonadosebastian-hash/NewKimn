@@ -20,6 +20,7 @@ import Metodologia from "./pages/Metodologia";
 import Glosario from "./pages/Glosario";
 import Contacto from "./pages/Contacto";
 import Calendario from "./pages/Calendario";
+import EstadoAgrupado from "./pages/EstadoAgrupado";
 
 function Router() {
   return (
@@ -31,6 +32,7 @@ function Router() {
       <Route path="/glosario" component={Glosario} />
       <Route path="/contacto" component={Contacto} />
       <Route path="/calendario" component={Calendario} />
+      <Route path="/estado-agrupado" component={EstadoAgrupado} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

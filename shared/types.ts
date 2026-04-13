@@ -113,3 +113,11 @@ export interface AppState {
   loading: LoadingState;
   notifications: Notification[];
 }
+
+export interface GroupedReport {
+  id: string;
+  titulo: string;
+  descripcion: string;
+  iframeSrc: string;
+  tipo: "powerbi" | "tableau";
+}

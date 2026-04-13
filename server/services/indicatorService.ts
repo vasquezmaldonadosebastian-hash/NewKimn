@@ -1,7 +1,8 @@
-import type { Indicator, IndicatorCategory } from "../../shared/types";
+import type { Indicator, IndicatorCategory, GroupedReport } from "../../shared/types";
 
 let indicators: Indicator[] = [];
 let categories: IndicatorCategory[] = [];
+let groupedReports: GroupedReport[] = [];
 
 const resolveIframe = (item: any): { iframeSrc: string; tipo: "powerbi" | "tableau" | "placeholder" } => {
   const enlace = item.enlaceVisualizacion || item["Enlace visualizacion"] || "";
@@ -49,6 +50,16 @@ const mapItem = (item: any): Indicator => {
   };
 };
 
+const mapGroupedReport = (item: any): GroupedReport => {
+  return {
+    id: item.id,
+    titulo: item.titulo,
+    descripcion: item.descripcion,
+    iframeSrc: item.iframeSrc,
+    tipo: item.tipo,
+  };
+};
+
 const groupByCategory = (data: any[]): IndicatorCategory[] => {
   const categoryMap = new Map<string, IndicatorCategory>();
   data.forEach((item) => {
@@ -68,15 +79,17 @@ const groupByCategory = (data: any[]): IndicatorCategory[] => {
   return Array.from(categoryMap.values());
 };
 
-export const initializeIndicators = (data: any[]) => {
+export const initializeIndicators = (data: any[], reportsData: any[] = []) => {
   indicators = data.map(mapItem);
   categories = groupByCategory(data);
+  groupedReports = reportsData.map(mapGroupedReport);
 };
 
 export const getIndicators = (): Indicator[] => indicators;
-export const getIndicator = (id: string): Indicator | undefined => indicators.find((ind) => ind.id === id);
+export const const getIndicator = (id: string): Indicator | undefined => indicators.find((ind) => ind.id === id);
 export const getCategories = (): IndicatorCategory[] => categories;
 export const getIndicatorsByCategory = (categoryId: string): Indicator[] => {
   const category = categories.find((cat) => cat.id === categoryId);
   return category ? category.indicadores : [];
 };
+export const getGroupedReports = (): GroupedReport[] => groupedReports;

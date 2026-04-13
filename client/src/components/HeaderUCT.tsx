@@ -22,6 +22,7 @@ export default function HeaderUCT() {
     { label: "GLOSARIO", href: "/glosario" },
     { label: "CONTACTO", href: "/contacto" },
     { label: "CALENDARIO", href: "/calendario" },
+    { label: "ESTADO AGRUPADO", href: "/estado-agrupado" },
   ];
 
   return (

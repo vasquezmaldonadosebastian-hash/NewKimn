@@ -2,7 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
-import { initializeIndicators } from "./services/indicatorService";
+import { initializeIndicators, getGroupedReports } from "./services/indicatorService";
 import indicatorRoutes from "./routes/indicators";
 import indicadoresData from "../indicadores.json"; // Importar el JSON directamente
 
@@ -14,10 +14,21 @@ async function startServer() {
   const server = createServer(app);
 
   // Inicializar el servicio de indicadores con los datos del JSON
-  initializeIndicators(indicadoresData);
+  // Asumiendo que indicadoresData.reportesAgrupados contiene los reportes agrupados
+  initializeIndicators(indicadoresData.indicadores, indicadoresData.reportesAgrupados);
 
   // Montar las rutas de la API
   app.use("/api", indicatorRoutes);
+
+  // Nueva ruta para reportes agrupados
+  app.get("/api/reportes-agrupados", (_req, res) => {
+    try {
+      const reports = getGroupedReports();
+      res.json(reports);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch grouped reports' });
+    }
+  });
 
   // Serve static files from dist/public in production
   const staticPath =
