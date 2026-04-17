@@ -13,7 +13,16 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
-  initializeIndicators(indicadoresData.indicadores, indicadoresData.reportesAgrupados);
+  // Handle both old { indicadores, reportesAgrupados } and new [ ... ] formats
+  const rawIndicators = Array.isArray(indicadoresData) 
+    ? indicadoresData 
+    : (indicadoresData as any).indicadores || [];
+  
+  const rawReports = Array.isArray(indicadoresData) 
+    ? [] 
+    : (indicadoresData as any).reportesAgrupados || [];
+
+  initializeIndicators(rawIndicators, rawReports);
 
   app.use("/api", indicatorRoutes);
 
@@ -34,7 +43,8 @@ async function startServer() {
   app.use(express.static(staticPath));
 
   app.get("*", (_req, res) => {
-    res.sendFile(path.join(staticPath, "index.html"));
+    const indexPath = path.join(staticPath, "index.html");
+    res.sendFile(indexPath);
   });
 
   const port = process.env.PORT || 3000;
