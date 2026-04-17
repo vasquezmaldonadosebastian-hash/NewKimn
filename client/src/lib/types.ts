@@ -1,5 +1,5 @@
 // Re-export types from shared for client-side use
-export type { Indicator, IndicatorCategory, Dashboard } from "@shared/types";
+export type { Indicator, IndicatorCategory, Dashboard } from "@shared/types/indicators";
 
 // Client-specific types if needed
 export interface IndicatorListItem {

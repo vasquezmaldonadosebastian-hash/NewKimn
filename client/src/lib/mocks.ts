@@ -34,11 +34,11 @@ const mockUsers = [
 ];
 
 // Helper Functions
-function getMockIndicatorById(id) {  
+function getMockIndicatorById(id: number) {  
     return mockIndicators.find(indicator => indicator.id === id);  
 }
 
-function getMockUserById(id) {  
+function getMockUserById(id: number) {  
     return mockUsers.find(user => user.id === id);  
 }
 

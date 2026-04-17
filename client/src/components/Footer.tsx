@@ -18,7 +18,7 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 flex items-center justify-center brightness-0 invert">
-                <img src="/logo-uct.png" alt="Logo UCT" className="w-full h-full object-contain" />
+                <img src="/assets/logo-uct.gif" alt="Logo UCT" className="w-full h-full object-contain" />
               </div>
               <div>
                 <div className="font-bold text-sm tracking-wide" style={{ fontFamily: 'Montserrat, sans-serif' }}>

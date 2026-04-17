@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import type { Indicator, IndicatorCategory } from '@shared/types';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback, useMemo } from 'react';
+import type { Indicator, IndicatorCategory } from '@shared/types/indicators';
 
 interface IndicatorsContextType {
   indicators: Indicator[];
@@ -8,6 +8,8 @@ interface IndicatorsContextType {
   error: string | null;
   selectedCategory: string | null;
   setSelectedCategory: (id: string | null) => void;
+  getIndicatorById: (id: string) => Indicator | undefined;
+  getIndicatorsByCategory: (categoryId: string) => Indicator[];
 }
 
 const IndicatorsContext = createContext<IndicatorsContextType | undefined>(undefined);
@@ -23,6 +25,7 @@ export function IndicatorsProvider({ children }: IndicatorsProviderProps) {
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
+  // Fetch data on mount
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -51,17 +54,33 @@ export function IndicatorsProvider({ children }: IndicatorsProviderProps) {
     loadData();
   }, []);
 
+  // Memoized helper functions to avoid recreating on every render
+  const getIndicatorById = useCallback((id: string): Indicator | undefined => {
+    return indicators.find((ind) => ind.id === id);
+  }, [indicators]);
+
+  const getIndicatorsByCategory = useCallback((categoryId: string): Indicator[] => {
+    const category = categories.find((cat) => cat.id === categoryId);
+    return category ? category.indicadores : [];
+  }, [categories]);
+
+  // Memoize context value to prevent unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      indicators,
+      categories,
+      loading,
+      error,
+      selectedCategory,
+      setSelectedCategory,
+      getIndicatorById,
+      getIndicatorsByCategory,
+    }),
+    [indicators, categories, loading, error, selectedCategory, getIndicatorById, getIndicatorsByCategory]
+  );
+
   return (
-    <IndicatorsContext.Provider
-      value={{
-        indicators,
-        categories,
-        loading,
-        error,
-        selectedCategory,
-        setSelectedCategory,
-      }}
-    >
+    <IndicatorsContext.Provider value={contextValue}>
       {children}
     </IndicatorsContext.Provider>
   );

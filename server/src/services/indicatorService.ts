@@ -1,0 +1,94 @@
+import type { Indicator, IndicatorCategory, GroupedReport, RawIndicator, RawGroupedReport } from "../../../shared/types/indicators";
+
+let indicators: Indicator[] = [];
+let categories: IndicatorCategory[] = [];
+let groupedReports: GroupedReport[] = [];
+
+const resolveIframe = (item: RawIndicator): { iframeSrc: string; tipo: "powerbi" | "tableau" | "placeholder" } => {
+  const enlace = item.enlaceVisualizacion || item["Enlace visualizacion"] || "";
+  if (!enlace || enlace === "None" || enlace === "Visible" || enlace === "falta" || enlace === "-") {
+    return { iframeSrc: "", tipo: "placeholder" };
+  }
+  return { iframeSrc: enlace, tipo: enlace.includes("powerbi") ? "powerbi" : "tableau" };
+};
+
+const mapItem = (item: RawIndicator): Indicator => {
+  const { iframeSrc, tipo } = resolveIframe(item);
+
+  return {
+    id: (item.id ?? item.nro ?? item["ID"] ?? item["Nro indicador"])?.toString() ?? "",
+    codigo: item.codigo ?? item["Código del indicador"] ?? "",
+    titulo: item.nombre ?? item["Nombre del indicador"] ?? "",
+    descripcion: item.descripcion ?? item["Descripción"] ?? "",
+    objetivo: item.objetivo ?? item["Objetivo del Indicador"] ?? "",
+
+    formula: item.formula ?? item["Formula del cálculo"] ?? "",
+    formulaSimplificada: item.formulaSimplificada ?? item["Formula simplificada"] ?? null,
+    variables: item.variables ?? null,
+
+    iframeSrc,
+    iframeHeight: 600, // Default value, can be made dynamic if needed
+    tipo,
+
+    unidad: item.unidadMedida ?? item["Unidad de medida"] ?? "",
+    frecuenciaMedicion: item.frecuenciaMedicion ?? item["Frecuencia de Medición"] ?? "",
+    estado: item.estado ?? item["Estado del Indicador"] ?? "",
+    lineaBase: (!item.lineaBase || item.lineaBase === "None") ? null : item.lineaBase,
+    dimension: item.dimension ?? item["Dimensión"] ?? "",
+    area: item.area ?? item["Área"] ?? "",
+    fechaCorte: item.fechaCorte ?? item["Fecha de Corte"] ?? "",
+
+    fuentes: item.fuente ? [item.fuente] : item["Fuente de Dato"] ? [item["Fuente de Dato"]] : [],
+    fuenteAdministrativa: item.fuenteAdministrativa ?? item["Fuente administrativa"] ?? "",
+    responsableCalculo: item.responsableCalculo ?? item["Responsable de Calculo"] ?? "",
+    responsableVerificar: item.responsableVerificar ?? item["Responsable de verificar"] ?? "",
+    instructivoCalculo: item.instructivoCalculo ?? item["Instructivo de Cálculo"] ?? "",
+
+    ultimaActualizacion: item.fechaCorte ?? item["Fecha de Corte"] ?? "",
+    notasMetodologicas: item.notasMetodologicas ?? item.formula ?? item["Formula del cálculo"] ?? "",
+  };
+};
+
+const mapGroupedReport = (item: RawGroupedReport): GroupedReport => {
+  return {
+    id: item.id,
+    titulo: item.titulo,
+    descripcion: item.descripcion,
+    iframeSrc: item.iframeSrc,
+    tipo: item.tipo,
+  };
+};
+
+const groupByCategory = (data: RawIndicator[]): IndicatorCategory[] => {
+  const categoryMap = new Map<string, IndicatorCategory>();
+  data.forEach((item) => {
+    const categoryName = item.area ?? item["Área"];
+    if (!categoryName) return;
+    if (!categoryMap.has(categoryName)) {
+      categoryMap.set(categoryName, {
+        id: categoryName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-*|-*$/g, ""),
+        label: categoryName,
+        icono: "", // Icono puede ser dinámico o predefinido
+        descripcion: `Indicadores relacionados con ${categoryName.toLowerCase()}`,
+        indicadores: [],
+      });
+    }
+    categoryMap.get(categoryName)!.indicadores.push(mapItem(item));
+  });
+  return Array.from(categoryMap.values());
+};
+
+export const initializeIndicators = (data: RawIndicator[], reportsData: RawGroupedReport[] = []) => {
+  indicators = data.map(mapItem);
+  categories = groupByCategory(data);
+  groupedReports = reportsData.map(mapGroupedReport);
+};
+
+export const getIndicators = (): Indicator[] => indicators;
+export const getIndicator = (id: string): Indicator | undefined => indicators.find((ind) => ind.id === id);
+export const getCategories = (): IndicatorCategory[] => categories;
+export const getIndicatorsByCategory = (categoryId: string): Indicator[] => {
+  const category = categories.find((cat) => cat.id === categoryId);
+  return category ? category.indicadores : [];
+};
+export const getGroupedReports = (): GroupedReport[] => groupedReports;

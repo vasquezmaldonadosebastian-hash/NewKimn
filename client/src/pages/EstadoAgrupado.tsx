@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
-import type { GroupedReport } from "@shared/types";
+import type { GroupedReport } from "@shared/types/indicators";
 
 export default function EstadoAgrupado() {
   const [reports, setReports] = useState<GroupedReport[]>([]);

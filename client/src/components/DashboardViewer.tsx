@@ -1,5 +1,5 @@
 /*
- * DashboardViewer — Observatorio de Indicadores de Género
+ * DashboardViewer — Observatorio de Indicatores de Género
  * Design: Card flotante con sombra morada, iframe optimizado, acordeón de metodología
  * Colors: White card, purple shadow, lavender accordion bg
  */
@@ -15,10 +15,10 @@ import {
   BarChart2,
   ExternalLink,
 } from "lucide-react";
-import type { Indicador } from "@/lib/indicadores-data";
+import type { Indicator } from "@shared/types/indicators";
 
 interface DashboardViewerProps {
-  indicador: Indicador;
+  indicador: Indicator;
 }
 
 export default function DashboardViewer({ indicador }: DashboardViewerProps) {

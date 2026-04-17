@@ -9,7 +9,7 @@ export function useIndicators() {
   };
 
   const getIndicatorsByCategory = (categoryId: string): Indicator[] => {
-    return context.indicators.filter(ind => ind.categoria === categoryId);
+    return context.indicators.filter(ind => ind.area === categoryId);
   };
 
   return {
