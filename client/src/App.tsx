@@ -4,23 +4,25 @@
  * Routes: /, /indicadores, /metodologia, /glosario, /contacto
  */
 
+import React, { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { IndicatorsProvider } from "./contexts/IndicatorsContext";
 import HeaderUCT from "./components/HeaderUCT";
 import FooterUCT from "./components/FooterUCT";
-import Home from "./pages/Home";
-import Indicadores from "./features/indicadores/pages/Indicadores";
-import IndicadorPage from "./features/indicadores/pages/IndicadorPage";
-import Metodologia from "./pages/Metodologia";
-import Glosario from "./pages/Glosario";
-import Contacto from "./pages/Contacto";
-import Calendario from "./pages/Calendario";
-import EstadoAgrupado from "./pages/EstadoAgrupado";
+
+const Home = lazy(() => import("./pages/Home"));
+const Indicadores = lazy(() => import("./features/indicadores/pages/Indicadores"));
+const IndicadorPage = lazy(() => import("./features/indicadores/pages/IndicadorPage"));
+const Metodologia = lazy(() => import("./pages/Metodologia"));
+const Glosario = lazy(() => import("./pages/Glosario"));
+const Contacto = lazy(() => import("./pages/Contacto"));
+const Calendario = lazy(() => import("./pages/Calendario"));
+const EstadoAgrupado = lazy(() => import("./pages/EstadoAgrupado"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function Router() {
   return (
@@ -49,7 +51,15 @@ function App() {
             <div className="flex flex-col min-h-screen">
               <HeaderUCT />
               <main className="flex-1">
-                <Router />
+                <Suspense
+                  fallback={
+                    <div className="min-h-[50vh] flex items-center justify-center text-sm text-gray-500">
+                      Cargando...
+                    </div>
+                  }
+                >
+                  <Router />
+                </Suspense>
               </main>
               <FooterUCT />
             </div>

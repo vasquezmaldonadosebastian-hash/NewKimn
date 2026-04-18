@@ -1,9 +1,13 @@
 import express from "express";
-import pinoHttp from "pino-http";
 import { createIndicatorRoutes } from "./api/v1/indicators/indicators.routes";
 import { errorMiddleware } from "./middleware/error.middleware";
 import { AppError } from "./errors/AppError";
 import type { IndicatorService } from "./services/indicatorService";
+import { createHttpLogger } from "./observability/logger";
+import { getMetricsSnapshot, metricsMiddleware } from "./middleware/metrics.middleware";
+import compression from "compression";
+import helmet from "helmet";
+import { getAllowedFrameSrc, isCspReportOnly } from "./config/security";
 
 type CreateAppDeps = {
   indicatorService: IndicatorService;
@@ -12,9 +16,35 @@ type CreateAppDeps = {
 export function createApp(deps: CreateAppDeps) {
   const app = express();
 
+  app.set("etag", "strong");
+
+  app.use(
+    helmet({
+      // Embedded dashboards often require cross-origin resources; keep COEP off.
+      crossOriginEmbedderPolicy: false,
+      contentSecurityPolicy: {
+        reportOnly: isCspReportOnly(),
+        useDefaults: true,
+        directives: {
+          // Keep defaults + allow dashboards in frames.
+          "frame-src": ["'self'", ...getAllowedFrameSrc()],
+          "img-src": ["'self'", "data:", "https:"],
+          "connect-src": ["'self'", "https:"],
+          "script-src": ["'self'", "'unsafe-inline'", "https:"],
+          "style-src": ["'self'", "'unsafe-inline'", "https:"],
+        },
+      },
+      referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+    })
+  );
+
   if (process.env.NODE_ENV !== "test") {
-    app.use(pinoHttp());
+    app.use(createHttpLogger());
+    app.use(metricsMiddleware());
   }
+
+  // Lightweight perf baseline: enable gzip/br when available.
+  app.use(compression());
   app.use(express.json({ limit: "100kb" }));
 
   app.use("/api", createIndicatorRoutes(deps.indicatorService));
@@ -25,6 +55,10 @@ export function createApp(deps: CreateAppDeps) {
     } catch (err) {
       next(err);
     }
+  });
+
+  app.get("/api/metrics", (_req, res) => {
+    res.json(getMetricsSnapshot());
   });
 
   // Consistent error payload for API routes.
