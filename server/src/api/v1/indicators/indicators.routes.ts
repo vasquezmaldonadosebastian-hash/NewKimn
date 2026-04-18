@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { z } from "zod";
 import { AppError } from "../../../errors/AppError";
-import { validateParams } from "../../../middleware/validate.middleware";
+import { validateParams, validateQuery } from "../../../middleware/validate.middleware";
 import type { IndicatorService } from "../../../services/indicatorService";
 
 const idParamsSchema = z.object({ id: z.string().min(1) });
@@ -9,11 +9,18 @@ const categoryParamsSchema = z.object({
   categoryId: z.string().regex(/^[a-z0-9-]+$/, "Invalid categoryId"),
 });
 
+const indicatorsQuerySchema = z.object({
+  area: z.string().min(1).optional(),
+  dimension: z.string().min(1).optional(),
+});
+
 export function createIndicatorRoutes(indicatorService: IndicatorService) {
   const router = Router();
 
-  router.get("/indicadores", (_req, res) => {
-    res.json(indicatorService.getIndicators());
+  router.get("/indicadores", validateQuery(indicatorsQuerySchema), (req, res) => {
+    const query = req.query as z.infer<typeof indicatorsQuerySchema>;
+    const hasQuery = Boolean(query.area || query.dimension);
+    res.json(hasQuery ? indicatorService.queryIndicators(query) : indicatorService.getIndicators());
   });
 
   router.get("/indicadores/:id", validateParams(idParamsSchema), (req, res) => {

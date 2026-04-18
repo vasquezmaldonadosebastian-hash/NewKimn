@@ -37,6 +37,18 @@ describe("GET /api/indicadores", () => {
     expect(res.body.length).toBe(1);
     expect(res.body[0].id).toBe("1");
   });
+
+  it("supports filtering by area query", async () => {
+    const app = await makeApp();
+
+    const ok = await request(app).get("/api/indicadores?area=Salud");
+    expect(ok.status).toBe(200);
+    expect(ok.body.length).toBe(1);
+
+    const none = await request(app).get("/api/indicadores?area=Otra");
+    expect(none.status).toBe(200);
+    expect(none.body.length).toBe(0);
+  });
 });
 
 describe("GET /api/indicadores/:id", () => {

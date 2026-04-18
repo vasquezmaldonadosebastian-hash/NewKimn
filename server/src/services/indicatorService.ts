@@ -1,8 +1,25 @@
 import type { GroupedReport, Indicator, IndicatorCategory } from "../../../shared/types/indicators";
 import type { IndicatorRepository } from "../repositories/IndicatorRepository";
 
+export type IndicatorQuery = {
+  area?: string;
+  dimension?: string;
+};
+
 export class IndicatorService {
   constructor(private readonly repository: IndicatorRepository) {}
+
+  queryIndicators(query: IndicatorQuery): Indicator[] {
+    const indicators = this.repository.getIndicators();
+    const area = query.area?.trim();
+    const dimension = query.dimension?.trim();
+
+    return indicators.filter((ind) => {
+      if (area && ind.area !== area) return false;
+      if (dimension && ind.dimension !== dimension) return false;
+      return true;
+    });
+  }
 
   getIndicators(): Indicator[] {
     return this.repository.getIndicators();

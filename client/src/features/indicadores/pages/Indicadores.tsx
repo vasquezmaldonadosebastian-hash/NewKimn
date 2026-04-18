@@ -4,11 +4,12 @@
  * Colors: #F5F4F8 bg, white cards, #0176DE accents
  */
 
-import { useState, useMemo, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ChevronRight, Search, Filter, X } from "lucide-react";
 import { useIndicatorsContext } from "../../../contexts/IndicatorsContext";
 import type { Indicator } from "@shared/types/indicators";
+import { apiGetJson } from "@/lib/apiClient";
 
 const COLOR_MAP: Record<string, { bg: string; border: string; text: string }> = {
   "1.- Institucionalización": { bg: "#E8F2FF", border: "#E5D4F0", text: "#0176DE" },
@@ -29,6 +30,8 @@ export default function Indicadores() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterArea, setFilterArea] = useState("todos");
   const [filterDimension, setFilterDimension] = useState("todos");
+  const [visibleIndicators, setVisibleIndicators] = useState<Indicator[]>([]);
+  const [loadingFiltered, setLoadingFiltered] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -37,6 +40,32 @@ export default function Indicadores() {
     if (dimensionParam) setFilterDimension(dimensionParam);
     if (areaParam) setFilterArea(areaParam);
   }, []);
+
+  useEffect(() => {
+    // Semantic filters (area/dimension) come from backend; UI-only search stays local.
+    const loadFiltered = async () => {
+      try {
+        setLoadingFiltered(true);
+        const qs = new URLSearchParams();
+        if (filterArea !== "todos") qs.set("area", filterArea);
+        if (filterDimension !== "todos") qs.set("dimension", filterDimension);
+
+        const path = qs.toString() ? `/api/indicadores?${qs.toString()}` : "/api/indicadores";
+        const data = await apiGetJson<Indicator[]>(path);
+        setVisibleIndicators(data);
+      } catch {
+        // Fall back to whatever is already loaded.
+        setVisibleIndicators(indicators);
+      } finally {
+        setLoadingFiltered(false);
+      }
+    };
+
+    // Wait for initial load from context; then the page owns filtered loading.
+    if (!loading && !error) {
+      loadFiltered();
+    }
+  }, [filterArea, filterDimension, indicators, loading, error]);
 
   // ✅ Áreas únicas reales desde el campo 'area' del JSON
   const areas = useMemo(() => {
@@ -59,18 +88,18 @@ export default function Indicadores() {
   }, [indicators]);
 
   const filtrados = useMemo(() => {
-    return indicators.filter((ind) => {
-      const matchesSearch =
-        ind.titulo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ind.codigo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ind.descripcion?.toLowerCase().includes(searchTerm.toLowerCase());
+    const base = visibleIndicators.length > 0 ? visibleIndicators : indicators;
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return base;
 
-      const matchesArea = filterArea === "todos" || ind.area === filterArea;
-      const matchesDimension = filterDimension === "todos" || ind.dimension === filterDimension;
-
-      return matchesSearch && matchesArea && matchesDimension;
+    return base.filter((ind) => {
+      return (
+        ind.titulo?.toLowerCase().includes(q) ||
+        ind.codigo?.toLowerCase().includes(q) ||
+        ind.descripcion?.toLowerCase().includes(q)
+      );
     });
-  }, [indicators, searchTerm, filterArea, filterDimension]);
+  }, [visibleIndicators, indicators, searchTerm]);
 
   const getColorForDimension = (dimension: string | undefined) => {
     if (!dimension) return DEFAULT_COLOR;
@@ -102,6 +131,11 @@ export default function Indicadores() {
       </div>
 
       <div className="container py-6">
+        {loadingFiltered && (
+          <div className="mb-4 text-sm text-gray-500">
+            Cargando filtros...
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="relative md:col-span-1">
             <Search className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
