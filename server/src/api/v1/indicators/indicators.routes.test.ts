@@ -50,6 +50,18 @@ describe("GET /api/indicadores", () => {
     expect(second.status).toBe(304);
   });
 
+  it("supports optional pagination via limit/offset", async () => {
+    const app = await makeApp();
+
+    const res = await request(app).get("/api/indicadores?limit=1&offset=0");
+    expect(res.status).toBe(200);
+    expect(res.headers["x-total-count"]).toBe("1");
+    expect(res.headers["x-limit"]).toBe("1");
+    expect(res.headers["x-offset"]).toBe("0");
+    expect(res.body.length).toBe(1);
+    expect(res.body[0].id).toBe("1");
+  });
+
   it("supports filtering by area query", async () => {
     const app = await makeApp();
 

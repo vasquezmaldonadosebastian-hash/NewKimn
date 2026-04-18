@@ -101,6 +101,22 @@ describe("Repository contract (memory vs sqlite)", () => {
     expect(sql.body[0].id).toBe("1");
   });
 
+  it("GET /api/indicadores supports optional pagination consistently", async () => {
+    const { memoryApp, sqliteApp } = await makeApps();
+
+    const mem = await request(memoryApp).get("/api/indicadores?limit=1&offset=0");
+    const sql = await request(sqliteApp).get("/api/indicadores?limit=1&offset=0");
+
+    expect(mem.status).toBe(200);
+    expect(sql.status).toBe(200);
+    expect(mem.headers["x-total-count"]).toBe(sql.headers["x-total-count"]);
+    expect(mem.headers["x-limit"]).toBe(sql.headers["x-limit"]);
+    expect(mem.headers["x-offset"]).toBe(sql.headers["x-offset"]);
+    expect(mem.body.length).toBe(1);
+    expect(sql.body.length).toBe(1);
+    expect(mem.body[0].id).toBe(sql.body[0].id);
+  });
+
   it("GET /api/indicadores/:id returns same payload", async () => {
     const { memoryApp, sqliteApp } = await makeApps();
 
@@ -173,4 +189,3 @@ describe("Repository contract (memory vs sqlite)", () => {
     expect(sortById(mem.body)).toEqual(sortById(sql.body));
   });
 });
-

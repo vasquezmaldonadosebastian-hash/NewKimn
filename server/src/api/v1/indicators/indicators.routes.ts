@@ -12,6 +12,8 @@ const categoryParamsSchema = z.object({
 const indicatorsQuerySchema = z.object({
   area: z.string().min(1).optional(),
   dimension: z.string().min(1).optional(),
+  limit: z.coerce.number().int().positive().max(1000).optional(),
+  offset: z.coerce.number().int().nonnegative().optional(),
 });
 
 export function createIndicatorRoutes(indicatorService: IndicatorService) {
@@ -19,8 +21,21 @@ export function createIndicatorRoutes(indicatorService: IndicatorService) {
 
   router.get("/indicadores", validateQuery(indicatorsQuerySchema), (req, res) => {
     const query = req.query as z.infer<typeof indicatorsQuerySchema>;
-    const hasQuery = Boolean(query.area || query.dimension);
-    res.json(hasQuery ? indicatorService.queryIndicators(query) : indicatorService.getIndicators());
+    const { limit, offset, ...filters } = query;
+
+    const hasFilters = Boolean(filters.area || filters.dimension);
+    const items = hasFilters ? indicatorService.queryIndicators(filters) : indicatorService.getIndicators();
+
+    if (limit || offset) {
+      const off = offset ?? 0;
+      const lim = limit ?? items.length;
+      res.setHeader("X-Total-Count", String(items.length));
+      res.setHeader("X-Limit", String(lim));
+      res.setHeader("X-Offset", String(off));
+      return res.json(items.slice(off, off + lim));
+    }
+
+    return res.json(items);
   });
 
   router.get("/indicadores/:id", validateParams(idParamsSchema), (req, res) => {
