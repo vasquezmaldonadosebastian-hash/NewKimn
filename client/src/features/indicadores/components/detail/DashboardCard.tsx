@@ -15,9 +15,8 @@ export default function DashboardCard({ indicador }: DashboardCardProps) {
   const fuente = indicador.fuenteAdministrativa || "Por definir";
   const titulo = useMemo(() => {
     if (!tieneIframe) return "Visualizacion Pendiente";
-    const provider = indicador.tipo === "powerbi" ? "Power BI" : "Tableau";
-    return `Visualizacion Interactiva — ${provider}`;
-  }, [indicador.tipo, tieneIframe]);
+    return indicador.titulo;
+  }, [indicador.titulo, tieneIframe]);
 
   const handleRefresh = () => {
     const iframe = iframeRef.current;
@@ -103,7 +102,13 @@ export default function DashboardCard({ indicador }: DashboardCardProps) {
             title="Dashboard"
             width="100%"
             height="100%"
-            src={indicador.iframeSrc}
+            src={
+              indicador.tipo === "powerbi"
+                ? indicador.iframeSrc.includes("?")
+                  ? `${indicador.iframeSrc}&navContentPaneEnabled=false`
+                  : `${indicador.iframeSrc}?navContentPaneEnabled=false`
+                : indicador.iframeSrc
+            }
             frameBorder="0"
             allowFullScreen={true}
             className="w-full h-full absolute inset-0"

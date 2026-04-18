@@ -73,7 +73,7 @@ export default function DashboardViewer({ indicador }: DashboardViewerProps) {
           <div className="flex items-center gap-2">
             <div className="w-2.5 h-2.5 rounded-full bg-[#0176DE]" />
             <span className="text-xs font-medium text-[#03122E]" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-              {indicador.tipo === "powerbi" ? "Microsoft Power BI" : indicador.tipo === "tableau" ? "Tableau" : "Visualización Interactiva"}
+              {indicador.titulo}
             </span>
           </div>
           <div className="flex items-center gap-1">
@@ -96,7 +96,13 @@ export default function DashboardViewer({ indicador }: DashboardViewerProps) {
         {/* Iframe area */}
         {indicador.iframeSrc ? (
           <iframe
-            src={indicador.iframeSrc}
+            src={
+              indicador.tipo === "powerbi"
+                ? indicador.iframeSrc.includes("?")
+                  ? `${indicador.iframeSrc}&navContentPaneEnabled=false`
+                  : `${indicador.iframeSrc}?navContentPaneEnabled=false`
+                : indicador.iframeSrc
+            }
             height={indicador.iframeHeight}
             title={indicador.titulo}
             allowFullScreen
