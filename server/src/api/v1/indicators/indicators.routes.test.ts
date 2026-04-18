@@ -1,12 +1,13 @@
 import request from "supertest";
 import { describe, expect, it } from "vitest";
 import { createApp } from "../../../createApp";
-import { initializeIndicators } from "../../../services/indicatorService";
+import { InMemoryIndicatorRepository } from "../../../repositories/InMemoryIndicatorRepository";
+import { IndicatorService } from "../../../services/indicatorService";
 import type { RawIndicator } from "../../../../../shared/types/indicators";
 
 process.env.NODE_ENV = "test";
 
-function seed() {
+async function makeApp() {
   const rawIndicators: RawIndicator[] = [
     {
       id: "1",
@@ -20,13 +21,15 @@ function seed() {
     },
   ];
 
-  initializeIndicators(rawIndicators, []);
+  const repo = new InMemoryIndicatorRepository({ indicatorsData: rawIndicators, reportsData: [] });
+  await repo.initialize();
+  const indicatorService = new IndicatorService(repo);
+  return createApp({ indicatorService });
 }
 
 describe("GET /api/indicadores", () => {
   it("returns indicators list", async () => {
-    seed();
-    const app = createApp();
+    const app = await makeApp();
 
     const res = await request(app).get("/api/indicadores");
     expect(res.status).toBe(200);
@@ -38,8 +41,7 @@ describe("GET /api/indicadores", () => {
 
 describe("GET /api/indicadores/:id", () => {
   it("returns a single indicator", async () => {
-    seed();
-    const app = createApp();
+    const app = await makeApp();
 
     const res = await request(app).get("/api/indicadores/1");
     expect(res.status).toBe(200);
@@ -47,8 +49,7 @@ describe("GET /api/indicadores/:id", () => {
   });
 
   it("returns unified 404 error payload when missing", async () => {
-    seed();
-    const app = createApp();
+    const app = await makeApp();
 
     const res = await request(app).get("/api/indicadores/does-not-exist");
     expect(res.status).toBe(404);
@@ -59,8 +60,7 @@ describe("GET /api/indicadores/:id", () => {
 
 describe("GET /api/categorias/:categoryId/indicadores", () => {
   it("rejects invalid categoryId", async () => {
-    seed();
-    const app = createApp();
+    const app = await makeApp();
 
     const res = await request(app).get("/api/categorias/invalid%20id/indicadores");
     expect(res.status).toBe(400);

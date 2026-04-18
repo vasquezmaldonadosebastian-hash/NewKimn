@@ -1,11 +1,15 @@
 import express from "express";
 import pinoHttp from "pino-http";
-import indicatorRoutes from "./api/v1/indicators/indicators.routes";
-import { getGroupedReports } from "./services/indicatorService";
+import { createIndicatorRoutes } from "./api/v1/indicators/indicators.routes";
 import { errorMiddleware } from "./middleware/error.middleware";
 import { AppError } from "./errors/AppError";
+import type { IndicatorService } from "./services/indicatorService";
 
-export function createApp() {
+type CreateAppDeps = {
+  indicatorService: IndicatorService;
+};
+
+export function createApp(deps: CreateAppDeps) {
   const app = express();
 
   if (process.env.NODE_ENV !== "test") {
@@ -13,11 +17,11 @@ export function createApp() {
   }
   app.use(express.json({ limit: "100kb" }));
 
-  app.use("/api", indicatorRoutes);
+  app.use("/api", createIndicatorRoutes(deps.indicatorService));
 
   app.get("/api/reportes-agrupados", (_req, res, next) => {
     try {
-      res.json(getGroupedReports());
+      res.json(deps.indicatorService.getGroupedReports());
     } catch (err) {
       next(err);
     }

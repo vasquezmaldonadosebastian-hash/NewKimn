@@ -2,17 +2,15 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
-import { initializeIndicators } from "./services/indicatorService";
 import { createApp } from "./createApp";
+import { InMemoryIndicatorRepository } from "./repositories/InMemoryIndicatorRepository";
+import { IndicatorService } from "./services/indicatorService";
 import indicadoresData from "../../data/indicadores.json";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function startServer() {
-  const app = createApp();
-  const server = createServer(app);
-
   // Handle both old { indicadores, reportesAgrupados } and new [ ... ] formats
   const rawIndicators = Array.isArray(indicadoresData) 
     ? indicadoresData 
@@ -22,7 +20,15 @@ async function startServer() {
     ? [] 
     : (indicadoresData as any).reportesAgrupados || [];
 
-  initializeIndicators(rawIndicators, rawReports);
+  const indicatorRepository = new InMemoryIndicatorRepository({
+    indicatorsData: rawIndicators,
+    reportsData: rawReports,
+  });
+  await indicatorRepository.initialize();
+
+  const indicatorService = new IndicatorService(indicatorRepository);
+  const app = createApp({ indicatorService });
+  const server = createServer(app);
 
   const staticPath =
     process.env.NODE_ENV === "production"
