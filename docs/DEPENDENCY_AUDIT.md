@@ -6,7 +6,7 @@ Reducir peso y superficie de dependencias manteniendo el set mínimo necesario p
 
 ## Hallazgos (Radix)
 
-En `client/src/components/ui/*` existen wrappers (estilo shadcn) que importan directamente estos paquetes:
+En `client/src/components/ui/*` existían wrappers (estilo shadcn) que importaban directamente estos paquetes.
 
 - `@radix-ui/react-accordion`
 - `@radix-ui/react-alert-dialog`
@@ -35,7 +35,13 @@ En `client/src/components/ui/*` existen wrappers (estilo shadcn) que importan di
 - `@radix-ui/react-toggle-group`
 - `@radix-ui/react-tooltip`
 
-Esto confirma que los paquetes están **referenciados por código**, pero no necesariamente que todos estén **en uso real** en pantallas/rutas actuales (depende de qué componentes UI se importan finalmente).
+Tras auditar imports reales desde el resto del código (fuera de `components/ui`), la app actualmente usa solo:
+
+- `@radix-ui/react-dialog`
+- `@radix-ui/react-slot`
+- `@radix-ui/react-tooltip`
+
+El resto de wrappers UI no estaba referenciado por la app y además impedía podar dependencias porque `tsc` incluye todo `client/src/**/*`.
 
 ## Proceso recomendado para eliminación segura
 
@@ -49,6 +55,11 @@ Esto confirma que los paquetes están **referenciados por código**, pero no nec
    - `pnpm run test`
    - `pnpm run build`
    - revisar `dist/bundle-report.md` (ver `pnpm run build:analyze`) para medir impacto.
+
+## Cambios aplicados
+
+- Se eliminaron wrappers no usados en `client/src/components/ui/*` para permitir podar dependencias Radix sin romper `tsc`.
+- Se removieron de `package.json` las dependencias Radix no usadas por el código actual.
 
 ## Nota
 
