@@ -853,8 +853,8 @@ Métricas complementarias sugeridas:
 22. [x] Separar `shared/types/indicator-domain.ts`.
 23. [x] Mover tipos genéricos a `shared/types/common.ts`.
 24. [x] Reemplazar imports rotos tras separación de tipos.
-25. [ ] Ejecutar `npm run lint` y corregir errores (pendiente de validación local/CI).
-26. [ ] Ejecutar `npm run test` y dejar verde (pendiente de validación local/CI).
+25. [x] Ejecutar `pnpm run lint` en CI (GitHub Actions) y corregir errores.
+26. [x] Ejecutar `pnpm run test` en CI (GitHub Actions) y dejar verde.
 27. [x] Crear carpeta `client/.../components/detail/`.
 28. [x] Extraer subcomponente `Hero.tsx` desde `IndicadorDetail`.
 29. [x] Extraer `DashboardCard.tsx`.
