@@ -69,12 +69,17 @@ export class SqliteIndicatorRepository implements IndicatorRepository {
 
   private reloadFromDb() {
     if (!this.db) return;
-    const indicatorsRows = this.db.prepare("SELECT json FROM indicators").all() as Array<{ json: string }>;
+    // Ensure deterministic ordering so API responses don't depend on SQLite internal iteration order.
+    const indicatorsRows = this.db
+      .prepare("SELECT json FROM indicators ORDER BY id")
+      .all() as Array<{ json: string }>;
     this.indicators = indicatorsRows.map((r) => JSON.parse(r.json) as Indicator);
 
     this.categories = groupIndicatorsByArea(this.indicators);
 
-    const reportsRows = this.db.prepare("SELECT json FROM grouped_reports").all() as Array<{ json: string }>;
+    const reportsRows = this.db
+      .prepare("SELECT json FROM grouped_reports ORDER BY id")
+      .all() as Array<{ json: string }>;
     this.groupedReports = reportsRows.map((r) => JSON.parse(r.json) as GroupedReport);
   }
 
