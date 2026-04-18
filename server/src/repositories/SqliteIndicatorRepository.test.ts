@@ -58,6 +58,22 @@ describe("SqliteIndicatorRepository", () => {
     expect(repo.getIndicator("1")?.codigo).toBe("IND-001");
   });
 
+  it("rejects dbPath that points to an existing directory", async () => {
+    const dirPath = path.join(
+      os.tmpdir(),
+      `newkimn-sqlite-dirpath-${Date.now()}-${Math.random()}`
+    );
+    fs.mkdirSync(dirPath, { recursive: true });
+
+    const repo = new SqliteIndicatorRepository({
+      dbPath: dirPath,
+      seedIndicators: [makeRawIndicator()],
+      seedReports: [],
+    });
+
+    await expect(repo.initialize()).rejects.toThrow(/directory/i);
+  });
+
   it("does not overwrite an existing database on re-initialization with different seed", async () => {
     const dbPath = path.join(
       os.tmpdir(),

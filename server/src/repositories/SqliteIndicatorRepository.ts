@@ -56,6 +56,10 @@ export class SqliteIndicatorRepository implements IndicatorRepository {
       if (dir && dir !== "." && !fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
+
+      if (fs.existsSync(resolvedDbPath) && fs.statSync(resolvedDbPath).isDirectory()) {
+        throw new Error("SQLite dbPath points to a directory");
+      }
     }
 
     this.db = new DatabaseSync(resolvedDbPath);
