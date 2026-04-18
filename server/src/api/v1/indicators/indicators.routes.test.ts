@@ -38,6 +38,18 @@ describe("GET /api/indicadores", () => {
     expect(res.body[0].id).toBe("1");
   });
 
+  it("supports conditional GET with ETag (304)", async () => {
+    const app = await makeApp();
+
+    const first = await request(app).get("/api/indicadores");
+    expect(first.status).toBe(200);
+    const etag = first.headers["etag"];
+    expect(etag).toBeTruthy();
+
+    const second = await request(app).get("/api/indicadores").set("If-None-Match", etag);
+    expect(second.status).toBe(304);
+  });
+
   it("supports filtering by area query", async () => {
     const app = await makeApp();
 
