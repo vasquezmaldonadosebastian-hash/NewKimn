@@ -872,16 +872,16 @@ Métricas complementarias sugeridas:
 
 ### Backlog extendido recomendado (si hay capacidad adicional)
 
-41. [ ] Introducir paginación opcional en `/api/indicadores` sin romper compatibilidad por defecto.
-42. [ ] Habilitar compresión HTTP y validar headers.
-43. [ ] Activar ETag y prueba condicional 304.
-44. [ ] Aplicar lazy-loading de rutas pesadas en cliente.
-45. [ ] Instrumentar análisis de bundle en CI.
-46. [ ] Auditar imports Radix y eliminar no usados.
-47. [ ] Documentar decisión del parche `wouter` con matriz de riesgos.
-48. [ ] Prototipar `SqliteIndicatorRepository` detrás de feature flag.
-49. [ ] Ejecutar prueba de coexistencia in-memory vs sqlite con suite de contrato.
-50. [ ] Definir SLO inicial (p95 y tasa de errores) y tablero operativo mínimo.
+41. [x] Introducir paginación opcional en `/api/indicadores` sin romper compatibilidad por defecto.
+42. [x] Habilitar compresión HTTP y validar headers.
+43. [x] Activar ETag y prueba condicional 304.
+44. [x] Aplicar lazy-loading de rutas pesadas en cliente.
+45. [x] Instrumentar análisis de bundle en CI.
+46. [x] Auditar imports Radix y eliminar no usados.
+47. [x] Documentar decisión del parche `wouter` con matriz de riesgos.
+48. [x] Prototipar `SqliteIndicatorRepository` detrás de feature flag.
+49. [x] Ejecutar prueba de coexistencia in-memory vs sqlite con suite de contrato.
+50. [x] Definir SLO inicial (p95 y tasa de errores) y tablero operativo mínimo.
 
 ---
 
