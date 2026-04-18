@@ -2,15 +2,15 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
-import { initializeIndicators, getGroupedReports } from "./services/indicatorService";
-import indicatorRoutes from "./api/v1/indicators/indicators.routes";
+import { initializeIndicators } from "./services/indicatorService";
+import { createApp } from "./createApp";
 import indicadoresData from "../../data/indicadores.json";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function startServer() {
-  const app = express();
+  const app = createApp();
   const server = createServer(app);
 
   // Handle both old { indicadores, reportesAgrupados } and new [ ... ] formats
@@ -23,17 +23,6 @@ async function startServer() {
     : (indicadoresData as any).reportesAgrupados || [];
 
   initializeIndicators(rawIndicators, rawReports);
-
-  app.use("/api", indicatorRoutes);
-
-  app.get("/api/reportes-agrupados", (_req, res) => {
-    try {
-      const reports = getGroupedReports();
-      res.json(reports);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch grouped reports' });
-    }
-  });
 
   const staticPath =
     process.env.NODE_ENV === "production"

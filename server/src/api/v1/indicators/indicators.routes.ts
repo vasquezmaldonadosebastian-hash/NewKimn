@@ -1,54 +1,47 @@
-import { Router } from 'express';
+import { Router } from "express";
+import { z } from "zod";
 import {
   getIndicators,
   getIndicator,
   getCategories,
   getIndicatorsByCategory,
 } from '../../../services/indicatorService';
+import { AppError } from "../../../errors/AppError";
+import { validateParams } from "../../../middleware/validate.middleware";
 
 const router = Router();
 
-router.get('/indicadores', (_req, res) => {
-  try {
-    const indicators = getIndicators();
-    res.json(indicators);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch indicators' });
-  }
+const idParamsSchema = z.object({ id: z.string().min(1) });
+const categoryParamsSchema = z.object({
+  categoryId: z.string().regex(/^[a-z0-9-]+$/, "Invalid categoryId"),
 });
 
-router.get('/indicadores/:id', (req, res) => {
-  try {
-    const { id } = req.params;
-    const indicator = getIndicator(id);
-
-    if (!indicator) {
-      return res.status(404).json({ error: 'Indicator not found' });
-    }
-
-    res.json(indicator);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch indicator' });
-  }
+router.get("/indicadores", (_req, res) => {
+  res.json(getIndicators());
 });
 
-router.get('/categorias', (_req, res) => {
-  try {
-    const categories = getCategories();
-    res.json(categories);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch categories' });
+router.get("/indicadores/:id", validateParams(idParamsSchema), (req, res) => {
+  const { id } = req.params as z.infer<typeof idParamsSchema>;
+  const indicator = getIndicator(id);
+
+  if (!indicator) {
+    throw new AppError("NOT_FOUND", "Indicator not found", 404);
   }
+
+  res.json(indicator);
 });
 
-router.get('/categorias/:categoryId/indicadores', (req, res) => {
-  try {
-    const { categoryId } = req.params;
-    const indicators = getIndicatorsByCategory(categoryId);
-    res.json(indicators);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch category indicators' });
-  }
+router.get("/categorias", (_req, res) => {
+  res.json(getCategories());
 });
+
+router.get(
+  "/categorias/:categoryId/indicadores",
+  validateParams(categoryParamsSchema),
+  (req, res) => {
+    const { categoryId } = req.params as z.infer<typeof categoryParamsSchema>;
+    res.json(getIndicatorsByCategory(categoryId));
+  }
+);
 
 export default router;
