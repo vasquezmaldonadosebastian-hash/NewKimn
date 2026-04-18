@@ -1,0 +1,147 @@
+import React from "react";
+import type { Indicator } from "@shared/types/indicators";
+import { Download, Expand, Info, RefreshCw, Share2 } from "lucide-react";
+import { useMemo, useRef } from "react";
+import { toast } from "sonner";
+
+type DashboardCardProps = {
+  indicador: Indicator;
+};
+
+export default function DashboardCard({ indicador }: DashboardCardProps) {
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+
+  const tieneIframe = Boolean(indicador.iframeSrc && indicador.iframeSrc.length > 0);
+  const fuente = indicador.fuenteAdministrativa || "Por definir";
+  const titulo = useMemo(() => {
+    if (!tieneIframe) return "Visualizacion Pendiente";
+    const provider = indicador.tipo === "powerbi" ? "Power BI" : "Tableau";
+    return `Visualizacion Interactiva — ${provider}`;
+  }, [indicador.tipo, tieneIframe]);
+
+  const handleRefresh = () => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    iframe.src = iframe.src;
+    toast.success("Dashboard actualizado.");
+  };
+
+  const handleFullscreen = async () => {
+    const iframe = iframeRef.current;
+    if (!iframe?.requestFullscreen) {
+      toast.info("Pantalla completa no disponible en este navegador.");
+      return;
+    }
+    try {
+      await iframe.requestFullscreen();
+    } catch {
+      toast.error("No fue posible activar pantalla completa.");
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: indicador.titulo,
+          text: indicador.descripcion,
+          url: window.location.href,
+        });
+        return;
+      }
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("URL copiada al portapapeles.");
+        return;
+      }
+
+      toast.info("Compartir no disponible en este navegador.");
+    } catch {
+      toast.error("No fue posible compartir el enlace.");
+    }
+  };
+
+  const handleDownload = () => {
+    toast.info("Descarga en desarrollo.");
+  };
+
+  return (
+    <div className="bg-white rounded-xl shadow-md overflow-hidden mb-12">
+      <div className="flex items-center justify-between px-6 py-4 bg-[#E8F2FF] border-b border-[#E5D4F0]">
+        <div className="flex items-center gap-3">
+          <div className={`w-3 h-3 rounded-full ${tieneIframe ? "bg-[#27AE60]" : "bg-[#F59E0B]"}`} />
+          <div>
+            <div
+              className="font-semibold text-[#03122E]"
+              style={{ fontFamily: "Montserrat, sans-serif" }}
+            >
+              {titulo}
+            </div>
+            <div className="text-xs text-gray-500">Fuente: {fuente}</div>
+          </div>
+        </div>
+        {tieneIframe && (
+          <div className="flex items-center gap-2">
+            <button onClick={handleRefresh} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Actualizar dashboard">
+              <RefreshCw className="w-4 h-4 text-gray-600" />
+            </button>
+            <button onClick={handleFullscreen} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Pantalla completa">
+              <Expand className="w-4 h-4 text-gray-600" />
+            </button>
+            <button onClick={handleShare} className="p-2 hover:bg-white/50 rounded-lg transition-colors" title="Compartir">
+              <Share2 className="w-4 h-4 text-gray-600" />
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="relative w-full bg-gradient-to-br from-[#E8F2FF] to-[#E8F2FF] h-[75vh] min-h-[700px]">
+        {tieneIframe ? (
+          <iframe
+            ref={iframeRef}
+            title="Dashboard"
+            width="100%"
+            height="100%"
+            src={indicador.iframeSrc}
+            frameBorder="0"
+            allowFullScreen={true}
+            className="w-full h-full absolute inset-0"
+            style={{ display: "block" }}
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full py-16 px-6">
+            <div className="w-20 h-20 rounded-3xl bg-[#E8F2FF] flex items-center justify-center mb-6">
+              <span className="text-4xl">Dashboard</span>
+            </div>
+            <h3 className="text-xl font-bold text-[#4B5563] mb-3" style={{ fontFamily: "Montserrat, sans-serif" }}>
+              Visualizacion por Configurar
+            </h3>
+            <p className="text-center text-gray-500 max-w-md mb-6">
+              Este indicador aun no cuenta con una visualizacion interactiva. La integracion del dashboard esta en proceso.
+            </p>
+            <div className="bg-white rounded-lg p-4 border border-[#E5D4F0] text-sm text-gray-600">
+              <strong>Responsable de calculo:</strong> {indicador.responsableCalculo || "Por asignar"}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {tieneIframe && (
+        <div className="flex items-center justify-between px-6 py-3 bg-[#F8F9FA] border-t border-gray-100 flex-wrap gap-3">
+          <span className="text-xs text-gray-600 flex items-center gap-2">
+            <Info className="w-4 h-4 text-[#0176DE]" />
+            Los datos se actualizan siguiendo el cronograma institucional de indicadores.
+          </span>
+          <div className="flex gap-2">
+            <button onClick={handleDownload} className="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="Descargar">
+              <Download className="w-4 h-4 text-gray-600" />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

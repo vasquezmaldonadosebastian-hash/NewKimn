@@ -1,54 +1,51 @@
-import { Router } from 'express';
-import {
-  getIndicators,
-  getIndicator,
-  getCategories,
-  getIndicatorsByCategory,
-} from '../../../services/indicatorService';
+import { Router } from "express";
+import { z } from "zod";
+import { AppError } from "../../../errors/AppError";
+import { validateParams, validateQuery } from "../../../middleware/validate.middleware";
+import type { IndicatorService } from "../../../services/indicatorService";
 
-const router = Router();
-
-router.get('/indicadores', (_req, res) => {
-  try {
-    const indicators = getIndicators();
-    res.json(indicators);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch indicators' });
-  }
+const idParamsSchema = z.object({ id: z.string().min(1) });
+const categoryParamsSchema = z.object({
+  categoryId: z.string().regex(/^[a-z0-9-]+$/, "Invalid categoryId"),
 });
 
-router.get('/indicadores/:id', (req, res) => {
-  try {
-    const { id } = req.params;
-    const indicator = getIndicator(id);
+const indicatorsQuerySchema = z.object({
+  area: z.string().min(1).optional(),
+  dimension: z.string().min(1).optional(),
+});
+
+export function createIndicatorRoutes(indicatorService: IndicatorService) {
+  const router = Router();
+
+  router.get("/indicadores", validateQuery(indicatorsQuerySchema), (req, res) => {
+    const query = req.query as z.infer<typeof indicatorsQuerySchema>;
+    const hasQuery = Boolean(query.area || query.dimension);
+    res.json(hasQuery ? indicatorService.queryIndicators(query) : indicatorService.getIndicators());
+  });
+
+  router.get("/indicadores/:id", validateParams(idParamsSchema), (req, res) => {
+    const { id } = req.params as z.infer<typeof idParamsSchema>;
+    const indicator = indicatorService.getIndicator(id);
 
     if (!indicator) {
-      return res.status(404).json({ error: 'Indicator not found' });
+      throw new AppError("NOT_FOUND", "Indicator not found", 404);
     }
 
     res.json(indicator);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch indicator' });
-  }
-});
+  });
 
-router.get('/categorias', (_req, res) => {
-  try {
-    const categories = getCategories();
-    res.json(categories);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch categories' });
-  }
-});
+  router.get("/categorias", (_req, res) => {
+    res.json(indicatorService.getCategories());
+  });
 
-router.get('/categorias/:categoryId/indicadores', (req, res) => {
-  try {
-    const { categoryId } = req.params;
-    const indicators = getIndicatorsByCategory(categoryId);
-    res.json(indicators);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch category indicators' });
-  }
-});
+  router.get(
+    "/categorias/:categoryId/indicadores",
+    validateParams(categoryParamsSchema),
+    (req, res) => {
+      const { categoryId } = req.params as z.infer<typeof categoryParamsSchema>;
+      res.json(indicatorService.getIndicatorsByCategory(categoryId));
+    }
+  );
 
-export default router;
+  return router;
+}
