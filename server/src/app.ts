@@ -3,7 +3,7 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createApp } from "./createApp";
-import { InMemoryIndicatorRepository } from "./repositories/InMemoryIndicatorRepository";
+import { createIndicatorRepository } from "./config/repositoryFactory";
 import { IndicatorService } from "./services/indicatorService";
 import indicadoresData from "../../data/indicadores.json";
 
@@ -20,10 +20,7 @@ async function startServer() {
     ? [] 
     : (indicadoresData as any).reportesAgrupados || [];
 
-  const indicatorRepository = new InMemoryIndicatorRepository({
-    indicatorsData: rawIndicators,
-    reportsData: rawReports,
-  });
+  const indicatorRepository = createIndicatorRepository({ rawIndicators, rawReports });
   await indicatorRepository.initialize();
 
   const indicatorService = new IndicatorService(indicatorRepository);
