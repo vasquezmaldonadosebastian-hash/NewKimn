@@ -35,10 +35,22 @@ async function startServer() {
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "..", "dist", "public");
 
-  app.use(express.static(staticPath));
+  app.use(
+    express.static(staticPath, {
+      maxAge: "1y",
+      immutable: true,
+      setHeaders: (res, filePath) => {
+        if (filePath.endsWith(".html")) {
+          // Keep HTML fresh so deployments reflect immediately.
+          res.setHeader("Cache-Control", "no-store");
+        }
+      },
+    })
+  );
 
   app.get("*", (_req, res) => {
     const indexPath = path.join(staticPath, "index.html");
+    res.setHeader("Cache-Control", "no-store");
     res.sendFile(indexPath);
   });
 

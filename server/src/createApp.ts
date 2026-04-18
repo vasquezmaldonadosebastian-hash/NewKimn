@@ -5,6 +5,7 @@ import { AppError } from "./errors/AppError";
 import type { IndicatorService } from "./services/indicatorService";
 import { createHttpLogger } from "./observability/logger";
 import { getMetricsSnapshot, metricsMiddleware } from "./middleware/metrics.middleware";
+import compression from "compression";
 
 type CreateAppDeps = {
   indicatorService: IndicatorService;
@@ -13,10 +14,15 @@ type CreateAppDeps = {
 export function createApp(deps: CreateAppDeps) {
   const app = express();
 
+  app.set("etag", "strong");
+
   if (process.env.NODE_ENV !== "test") {
     app.use(createHttpLogger());
     app.use(metricsMiddleware());
   }
+
+  // Lightweight perf baseline: enable gzip/br when available.
+  app.use(compression());
   app.use(express.json({ limit: "100kb" }));
 
   app.use("/api", createIndicatorRoutes(deps.indicatorService));
