@@ -1,5 +1,6 @@
 import path from "path";
 import { DatabaseSync } from "node:sqlite";
+import fs from "node:fs";
 import type {
   GroupedReport,
   Indicator,
@@ -20,6 +21,7 @@ export class SqliteIndicatorRepository implements IndicatorRepository {
   private readonly options: SqliteIndicatorRepositoryOptions;
   private db: DatabaseSync | null = null;
   private initialized = false;
+  private initializePromise: Promise<void> | null = null;
 
   private indicators: Indicator[] = [];
   private categories: IndicatorCategory[] = [];
@@ -31,10 +33,30 @@ export class SqliteIndicatorRepository implements IndicatorRepository {
 
   async initialize(): Promise<void> {
     if (this.initialized) return;
+    if (this.initializePromise) return this.initializePromise;
 
-    const resolvedDbPath = path.isAbsolute(this.options.dbPath)
-      ? this.options.dbPath
-      : path.resolve(process.cwd(), this.options.dbPath);
+    this.initializePromise = this.doInitialize().finally(() => {
+      this.initializePromise = null;
+    });
+
+    return this.initializePromise;
+  }
+
+  private async doInitialize(): Promise<void> {
+    const dbPath = this.options.dbPath;
+    const resolvedDbPath =
+      dbPath === ":memory:"
+        ? dbPath
+        : path.isAbsolute(dbPath)
+          ? dbPath
+          : path.resolve(process.cwd(), dbPath);
+
+    if (resolvedDbPath !== ":memory:") {
+      const dir = path.dirname(resolvedDbPath);
+      if (dir && dir !== "." && !fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+    }
 
     this.db = new DatabaseSync(resolvedDbPath);
     this.db.exec(`
