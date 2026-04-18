@@ -1,9 +1,10 @@
 import express from "express";
-import pinoHttp from "pino-http";
 import { createIndicatorRoutes } from "./api/v1/indicators/indicators.routes";
 import { errorMiddleware } from "./middleware/error.middleware";
 import { AppError } from "./errors/AppError";
 import type { IndicatorService } from "./services/indicatorService";
+import { createHttpLogger } from "./observability/logger";
+import { getMetricsSnapshot, metricsMiddleware } from "./middleware/metrics.middleware";
 
 type CreateAppDeps = {
   indicatorService: IndicatorService;
@@ -13,7 +14,8 @@ export function createApp(deps: CreateAppDeps) {
   const app = express();
 
   if (process.env.NODE_ENV !== "test") {
-    app.use(pinoHttp());
+    app.use(createHttpLogger());
+    app.use(metricsMiddleware());
   }
   app.use(express.json({ limit: "100kb" }));
 
@@ -25,6 +27,10 @@ export function createApp(deps: CreateAppDeps) {
     } catch (err) {
       next(err);
     }
+  });
+
+  app.get("/api/metrics", (_req, res) => {
+    res.json(getMetricsSnapshot());
   });
 
   // Consistent error payload for API routes.
