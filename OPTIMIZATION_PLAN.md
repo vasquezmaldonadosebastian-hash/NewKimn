@@ -829,46 +829,46 @@ Métricas complementarias sugeridas:
 
 > Cada tarea está pensada para ejecutarse en bloques de ≤2 horas.
 
-1. [ ] Crear rama `chore/optimization-plan-foundations`.
-2. [ ] Agregar script `test` en `package.json`.
-3. [ ] Agregar script `test:coverage` en `package.json`.
-4. [ ] Agregar script `lint` y `lint:fix`.
-5. [ ] Instalar dependencias de ESLint TypeScript.
-6. [ ] Crear `eslint.config.js` con reglas base y compatibilidad Prettier.
-7. [ ] Crear `vitest.config.ts` con entorno node/jsdom según carpeta.
-8. [ ] Refactorizar `server/src/app.ts` para extraer `createApp()` testeable.
-9. [ ] Crear `server/src/errors/AppError.ts`.
-10. [ ] Crear `server/src/middleware/error.middleware.ts`.
-11. [ ] Integrar middleware de error global en `createApp()`.
-12. [ ] Definir contrato de error en documentación técnica interna.
-13. [ ] Añadir `zod` al backend.
-14. [ ] Implementar schema `id` para `/indicadores/:id`.
-15. [ ] Implementar schema `categoryId` para `/categorias/:categoryId/indicadores`.
-16. [ ] Convertir `try/catch` de rutas a `next(err)`.
-17. [ ] Crear primer test `GET /api/indicadores` con `supertest`.
-18. [ ] Crear test `404` de `/api/indicadores/:id` con contrato de error.
-19. [ ] Crear helper `client/src/lib/apiClient.ts`.
-20. [ ] Migrar `IndicatorsContext` a `apiGet<T>()`.
-21. [ ] Ajustar UI de error para mostrar `message` del contrato.
-22. [ ] Separar `shared/types/indicator-domain.ts`.
-23. [ ] Mover tipos genéricos a `shared/types/common.ts`.
-24. [ ] Reemplazar imports rotos tras separación de tipos.
-25. [ ] Ejecutar `npm run lint` y corregir errores.
-26. [ ] Ejecutar `npm run test` y dejar verde.
-27. [ ] Crear carpeta `client/.../components/detail/`.
-28. [ ] Extraer subcomponente `Hero.tsx` desde `IndicadorDetail`.
-29. [ ] Extraer `DashboardCard.tsx`.
-30. [ ] Extraer `FormulaBlock.tsx`.
-31. [ ] Extraer `TechnicalSheet.tsx`.
-32. [ ] Reducir `IndicadorDetail.tsx` a componente orquestador.
-33. [ ] Crear tests de render para subcomponentes críticos.
-34. [ ] Crear `server/src/repositories/IndicatorRepository.ts`.
-35. [ ] Implementar `InMemoryIndicatorRepository.ts`.
-36. [ ] Refactorizar `indicatorService` para inyección de repositorio.
-37. [ ] Extraer normalizadores a `normalizers.ts`.
-38. [ ] Escribir tests unitarios de `mapItem`, `groupByCategory`, `resolveIframe`.
-39. [ ] Implementar `pino` + middleware request-id + timing.
-40. [ ] Implementar CSP/helmet + `frame-src` whitelisting y validar dashboards.
+1. [x] Crear rama de trabajo (ej.: `feat/phase-2-refactor`, `feat/phase-3-evolution`, `feat/phase-4-contract-tests`).
+2. [x] Agregar script `test` en `package.json`.
+3. [x] Agregar script `test:coverage` en `package.json`.
+4. [x] Agregar script `lint` y `lint:fix`.
+5. [x] Instalar dependencias de ESLint TypeScript.
+6. [x] Crear `eslint.config.js` con reglas base y compatibilidad Prettier.
+7. [x] Crear `vitest.config.ts` con entorno node/jsdom según carpeta.
+8. [x] Refactorizar `server/src/app.ts` para extraer `createApp()` testeable.
+9. [x] Crear `server/src/errors/AppError.ts`.
+10. [x] Crear `server/src/middleware/error.middleware.ts`.
+11. [x] Integrar middleware de error global en `createApp()`.
+12. [x] Definir contrato de error en documentación técnica interna.
+13. [x] Añadir `zod` al backend.
+14. [x] Implementar schema `id` para `/indicadores/:id`.
+15. [x] Implementar schema `categoryId` para `/categorias/:categoryId/indicadores`.
+16. [x] Convertir `try/catch` de rutas a `next(err)`.
+17. [x] Crear primer test `GET /api/indicadores` con `supertest`.
+18. [x] Crear test `404` de `/api/indicadores/:id` con contrato de error.
+19. [x] Crear helper `client/src/lib/apiClient.ts`.
+20. [x] Migrar `IndicatorsContext` a `apiGet<T>()`.
+21. [x] Ajustar UI de error para mostrar `message` del contrato.
+22. [x] Separar `shared/types/indicator-domain.ts`.
+23. [x] Mover tipos genéricos a `shared/types/common.ts`.
+24. [x] Reemplazar imports rotos tras separación de tipos.
+25. [ ] Ejecutar `npm run lint` y corregir errores (pendiente de validación local/CI).
+26. [ ] Ejecutar `npm run test` y dejar verde (pendiente de validación local/CI).
+27. [x] Crear carpeta `client/.../components/detail/`.
+28. [x] Extraer subcomponente `Hero.tsx` desde `IndicadorDetail`.
+29. [x] Extraer `DashboardCard.tsx`.
+30. [x] Extraer `FormulaBlock.tsx`.
+31. [x] Extraer `TechnicalSheet.tsx`.
+32. [x] Reducir `IndicadorDetail.tsx` a componente orquestador.
+33. [x] Crear tests de render para subcomponentes críticos.
+34. [x] Crear `server/src/repositories/IndicatorRepository.ts`.
+35. [x] Implementar `InMemoryIndicatorRepository.ts`.
+36. [x] Refactorizar `indicatorService` para inyección de repositorio.
+37. [x] Extraer normalizadores a `normalizers.ts`.
+38. [x] Escribir tests unitarios de `mapItem`, `groupByCategory`, `resolveIframe`.
+39. [x] Implementar `pino` + middleware request-id + timing.
+40. [x] Implementar CSP/helmet + `frame-src` whitelisting y validar dashboards.
 
 ### Backlog extendido recomendado (si hay capacidad adicional)
 
