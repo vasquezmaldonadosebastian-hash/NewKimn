@@ -60,7 +60,7 @@ export default function HeaderUCT() {
             <Link href="/">
               <div className="cursor-pointer hover:opacity-90 transition-opacity">
                 <img 
-                  src="/assets/logo-kimn-obs-3.png" 
+                  src="/assets/logo_KIMN_gris-scaled.webp" 
                   alt="Logo KIMN" 
                   className="h-10 md:h-14 w-auto object-contain" 
                 />
