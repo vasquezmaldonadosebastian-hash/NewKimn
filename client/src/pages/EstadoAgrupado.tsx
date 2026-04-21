@@ -72,7 +72,7 @@ export default function EstadoAgrupado() {
       <div className="container py-6">
         <div className="w-full overflow-hidden rounded-lg shadow-sm border border-gray-200 bg-white mb-8">
           <div className="p-4">
-            <div className="w-full max-w-[816px] mx-auto aspect-[816/1056]">
+            <div className="w-full max-w-[1000px] mx-auto aspect-[1000/1000]">
             <iframe
               src={report.iframeSrc}
               title={report.titulo}
