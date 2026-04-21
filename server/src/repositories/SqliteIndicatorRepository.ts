@@ -1,5 +1,5 @@
 import path from "path";
-import { DatabaseSync } from "node:sqlite";
+import { createRequire } from "node:module";
 import fs from "node:fs";
 import type {
   GroupedReport,
@@ -10,6 +10,20 @@ import type {
 } from "../../../shared/types/indicators";
 import type { IndicatorRepository } from "./IndicatorRepository";
 import { mapItem } from "../services/normalizers";
+
+type DatabaseSync = import("node:sqlite").DatabaseSync;
+type DatabaseSyncCtor = typeof import("node:sqlite").DatabaseSync;
+
+const require = createRequire(import.meta.url);
+let cachedDatabaseSyncCtor: DatabaseSyncCtor | null = null;
+
+function getDatabaseSyncCtor(): DatabaseSyncCtor {
+  if (cachedDatabaseSyncCtor) return cachedDatabaseSyncCtor;
+  // Vitest/Vite sometimes fails to resolve `node:sqlite` as a builtin module.
+  // Loading it via `require` avoids bundler resolution and delegates to Node.
+  cachedDatabaseSyncCtor = require("node:sqlite").DatabaseSync as DatabaseSyncCtor;
+  return cachedDatabaseSyncCtor;
+}
 
 type SqliteIndicatorRepositoryOptions = {
   dbPath: string;
@@ -62,6 +76,7 @@ export class SqliteIndicatorRepository implements IndicatorRepository {
       }
     }
 
+    const DatabaseSync = getDatabaseSyncCtor();
     this.db = new DatabaseSync(resolvedDbPath);
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS indicators (
