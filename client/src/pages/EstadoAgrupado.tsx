@@ -80,9 +80,10 @@ export default function EstadoAgrupado() {
           </button>
         </div>
 
-        <div className="w-full max-w-7xl mx-auto overflow-hidden rounded-lg shadow-sm border border-gray-200 bg-white mb-8">
+        <div className="w-full overflow-hidden rounded-lg shadow-sm border border-gray-200 bg-white mb-8">
           {activeTab === 'areas' && reportAreas && (
-            <div className="aspect-video w-full">
+            <div className="p-4">
+              <div className="w-full max-w-[210mm] mx-auto aspect-[210/297]">
               <iframe
                 src={reportAreas.iframeSrc}
                 title={reportAreas.titulo}
@@ -92,9 +93,11 @@ export default function EstadoAgrupado() {
                 allowFullScreen={true}
               ></iframe>
             </div>
+            </div>
           )}
           {activeTab === 'dimensiones' && reportDimensiones && (
-            <div className="aspect-video w-full">
+            <div className="p-4">
+              <div className="w-full max-w-[210mm] mx-auto aspect-[210/297]">
               <iframe
                 src={reportDimensiones.iframeSrc}
                 title={reportDimensiones.titulo}
@@ -103,6 +106,7 @@ export default function EstadoAgrupado() {
                 frameBorder="0"
                 allowFullScreen={true}
               ></iframe>
+            </div>
             </div>
           )}
         </div>
