@@ -17,12 +17,14 @@ export default function HeaderUCT() {
 
   const mainNavLinks = [
     { label: "INICIO", href: "/" },
-    { label: "SOBRE EL MODELO", href: "/metodologia" },
     { label: "INDICADORES", href: "/indicadores" },
+    { label: "VISTA GENERAL", href: "/estado-agrupado" },
+    { label: "SOBRE EL MODELO", href: "/metodologia" },
+    { label: "CALENDARIO", href: "/calendario" },    
     { label: "GLOSARIO", href: "/glosario" },
     { label: "CONTACTO", href: "/contacto" },
-    { label: "CALENDARIO", href: "/calendario" },
-    { label: "ESTADO AGRUPADO", href: "/estado-agrupado" },
+
+
   ];
 
   return (
@@ -71,7 +73,7 @@ export default function HeaderUCT() {
             <nav className="hidden lg:flex items-center gap-6">
               {mainNavLinks.map((link, idx) => (
                 <Link key={idx} href={link.href}>
-                  <a className="text-[13px] font-bold text-gray-700 hover:text-[#0073CC] transition-colors border-b-2 border-transparent hover:border-[#0073CC]">
+                  <a className="text-[11px] font-bold text-gray-700 hover:text-[#0073CC] transition-colors border-b-2 border-transparent hover:border-[#0073CC]">
                     {link.label}
                   </a>
                 </Link>
