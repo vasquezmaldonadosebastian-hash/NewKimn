@@ -1,4 +1,4 @@
-{
+﻿{
   "indicadores": [
   {
     "id": 1,
@@ -440,18 +440,12 @@
   ],
   "reportesAgrupados": [
     {
-      "id": "agrupado-areas",
-      "titulo": "Estado agrupado por áreas",
-      "descripcion": "Vista consolidada del estado de indicadores por áreas.",
-      "iframeSrc": "https://app.powerbi.com/view?r=eyJrIjoiMjliN2I5ZmItYjk2MS00MGQyLWIwNmItYmY2Nzg4ODJiM2YxIiwidCI6IjBkODQ5NzNiLThiYjctNDQ1OC05YzI5LTIxZmFiNDZmMTUyYyIsImMiOjR9",
-      "tipo": "powerbi"
-    },
-    {
-      "id": "agrupado-dimensiones",
-      "titulo": "Estado agrupado por dimensiones",
-      "descripcion": "Vista consolidada del estado de indicadores por dimensiones.",
+      "id": "estado-agrupado",
+      "titulo": "Estado agrupado de indicadores",
+      "descripcion": "Vista consolidada del estado de indicadores (filtros dentro del reporte).",
       "iframeSrc": "https://app.powerbi.com/view?r=eyJrIjoiMjliN2I5ZmItYjk2MS00MGQyLWIwNmItYmY2Nzg4ODJiM2YxIiwidCI6IjBkODQ5NzNiLThiYjctNDQ1OC05YzI5LTIxZmFiNDZmMTUyYyIsImMiOjR9",
       "tipo": "powerbi"
     }
   ]
 }
+
